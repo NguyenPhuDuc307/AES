@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Data;
 
 import Entity.Encrypt;
@@ -125,10 +121,10 @@ public class DBAccess {
         }
         return list;
     }
-    
+
     // đăng ký tài khoản
     public static boolean Encrypt(Encrypt encrypt) throws SQLException {
-        String query = "insert into tb_Encrypt values('" + encrypt.getUserCreated()+ "','" + encrypt.getDateTimeCreated()+ "','" + encrypt.getEncrypt()+ "','"+ encrypt.getKey() +"')";
+        String query = "insert into tb_Encrypt values('" + encrypt.getUserCreated() + "','" + encrypt.getDateTimeCreated() + "','" + encrypt.getEncrypt() + "','" + encrypt.getKey() + "')";
         DBAccess data = new DBAccess();
         int result = data.Update(query);
         if (result != 0) {
@@ -142,17 +138,17 @@ public class DBAccess {
 
         boolean check = DBAccess.Login(user);
         boolean check1 = DBAccess.checkUserName("admin");
-        boolean check2 = DBAccess.Register(user);
 
-        ArrayList<Encrypt> en = DBAccess.getAllEncrypt();
-
-        for (Encrypt encrypt : en) {
-            System.out.println(encrypt);
-        }
-
+        System.out.println(0%5);
+        System.out.println(1%5);
+        System.out.println(2%5);
+        System.out.println(3%5);
+        System.out.println(4%5);
+        
+        System.out.println(StringHandling.StringHandling.getStringEncrypt());
+        
         System.out.println(check);
         System.out.println(check1);
-        System.out.println(check2);
     }
 
 }

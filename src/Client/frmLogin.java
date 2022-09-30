@@ -4,7 +4,6 @@
  */
 package Client;
 
-import Entity.User;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -161,9 +160,6 @@ public class frmLogin extends javax.swing.JFrame {
         String username = txtUser.getText().trim();
         String pass = String.valueOf(txtPass.getPassword()).trim();
         
-        // tạo ra đối tượng user
-        User user = new User(username, pass);
-        
         // nếu thông tin không đầy đủ
         if (username.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin đăng nhập!");
@@ -171,7 +167,7 @@ public class frmLogin extends javax.swing.JFrame {
             USERNAME = username;
             
             // nối thông tin gửi đi thành một chuỗi
-            String inputString = StringHandling.StringHandling.stringSoncatenation("0", "login", "0", username + "\n" + pass);
+            String inputString = StringHandling.StringHandling.stringSoncatenation("0", "login", "0", username, pass);
 
             // chuyển thông tin về dạng byte
             byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);

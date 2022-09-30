@@ -4,8 +4,13 @@
  */
 package StringHandling;
 
+import Data.DBAccess;
+import Entity.Encrypt;
+import java.awt.List;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -81,7 +86,7 @@ public class StringHandling {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5;
     }
 
-    //
+    // lấy ra đoạn string từ array
     public static String getString(String[] arrStrings, int begin, int end) {
         String string = "";
         for (int i = begin; i < end; i++) {
@@ -94,12 +99,54 @@ public class StringHandling {
         }
         return string;
     }
-    
-    public static String getBase(String input){
+
+    // lấy ra kiểu byte từ string
+    public static String getBase(String input) {
         String inputBase64 = null;
         byte[] deByte = input.getBytes(StandardCharsets.UTF_8);
         inputBase64 = Base64.getEncoder().encodeToString(deByte);
         return inputBase64;
+    }
+
+    // chuyển list thành chuỗi
+    public static String getStringEncrypt() {
+        String string = "";
+        ArrayList<Encrypt> listEncrypt = DBAccess.getAllEncrypt();
+
+        for (Encrypt encrypt : listEncrypt) {
+            string += encrypt + "\n";
+        }
+
+        return string.substring(0, string.length() - 1);
+    }
+    
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel(DefaultTableModel model, String string) {
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += 5) {
+
+            // tạo ra đối tượng object
+            Object[] row = new Object[5];
+            for (int j = i; j < i + 5; j++) {
+
+                if (j % 5 == 0) {
+                    row[0] = String.valueOf(arrString[j]);
+                } else if (j % 5 == 1) {
+                    row[1] = String.valueOf(arrString[j]);
+                } else if (j % 5 == 2) {
+                    row[2] = String.valueOf(arrString[j]);
+                } else if (j % 5 == 3) {
+                    row[3] = String.valueOf(arrString[j]);
+                } else if (j % 5 == 4) {
+                    row[4] = String.valueOf(arrString[j]);
+                }
+            }
+            // lưu vào danh sách
+            model.addRow(row);
+        }
     }
 
     public static void main(String[] args) {

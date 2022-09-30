@@ -2,7 +2,12 @@ package Client;
 
 import Data.DBAccess;
 import Entity.Encrypt;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Scanner;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -16,23 +21,55 @@ import javax.swing.table.DefaultTableModel;
  */
 public final class frmMain extends javax.swing.JFrame {
 
-    public void show_encrypt() {
-        
-        ArrayList<Encrypt> listEncrypts = DBAccess.getAllEncrypt();
+    private Socket socket = null;
+    private PrintWriter out = null;
+    private Scanner in = null;
 
-        if (listEncrypts != null) {
-            DefaultTableModel model = (DefaultTableModel) Display_En.getModel();
-            Object[] row = new Object[5];
-            for (int i = 0; i < listEncrypts.size(); i++) {
-                row[0] = listEncrypts.get(i).getIdEncrypt();
-                row[1] = listEncrypts.get(i).getUserCreated();
-                row[2] = listEncrypts.get(i).getDateTimeCreated();
-                row[3] = listEncrypts.get(i).getEncrypt();
-                row[4] = listEncrypts.get(i).getKey();
-                model.addRow(row);
+    public void show_encrypt() {
+
+        // nối thông tin gửi đi thành một chuỗi
+        String inputString = StringHandling.StringHandling.stringSoncatenation("0", "getlist", "0", "0");
+
+        // chuyển thông tin về dạng byte
+        byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+        String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+
+        // kết quả trả về tại đây
+        String ketqua = "";
+
+        try {
+            // Socket nhận tham tham số là địa chỉ IP và Host
+            socket = new Socket("127.0.0.1", 8888);
+            out = new PrintWriter(socket.getOutputStream(), true);
+            in = new Scanner(socket.getInputStream());
+            out.println(inputBase64);
+
+            // lấy ra kết quả từ server rồi giải mã về string
+            ketqua = in.nextLine().trim();
+            String outputString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+
+            if (!outputString.equals("null")) {
+
+                // tạo ra biến chứa danh sách để đẩy lên table
+                DefaultTableModel model = (DefaultTableModel) Display_En.getModel();
+                
+                // thêm vào model từ chuỗi
+                StringHandling.StringHandling.getDefaultTableModel(model, outputString);
+                
+                socket.close();
+            } else {
+                JOptionPane.showMessageDialog(null, "Cơ sở dữ liệu trống");
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Cơ sở dữ liệu trống");
+
+        } catch (Exception e) {
+            try {
+                if (socket != null) {
+                    socket.close();
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            e.printStackTrace();
         }
     }
 

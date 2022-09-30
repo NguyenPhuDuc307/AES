@@ -62,9 +62,9 @@ public class ServerThread implements Runnable {
 
                 // cập nhật vào database
                 Encrypt encrypt = new Encrypt(string, enString, key);
-                
+
                 DBAccess.Encrypt(encrypt);
-                
+
                 out.println(enString);
             } else if (funcString.equals("decrypt")) {
                 // giải mã nội dung
@@ -92,19 +92,33 @@ public class ServerThread implements Runnable {
                 out.println(inputBase64);
             } else if (funcString.equals("login")) {
                 // ngắt chuỗi string
-                String[] arrLogin  = string.split("\n");
-                
+                String[] arrLogin = string.split("\n");
+
                 // username
                 String username = String.valueOf(arrLogin[0].toCharArray());
-                
+
                 // pass
                 String pass = String.valueOf(arrLogin[1].toCharArray());
-                
+
                 // Create user
                 User user = new User(username, pass);
-                
+
                 boolean result = DBAccess.Login(user);
                 out.println(result);
+            } else if (funcString.equals("getlist")) {
+                // lấy ra danh sách encrypt
+                String output = StringHandling.StringHandling.getStringEncrypt();
+
+                // chuyển nội dung về dạng byte
+                String inputBase64 = null;
+
+                if (output != null) {
+                    // chuyển nội dung về dạng byte
+                    inputBase64 = StringHandling.StringHandling.getBase(output);
+                } else {
+                    inputBase64 = StringHandling.StringHandling.getBase("null");
+                }
+                out.println(inputBase64);
             }
 
         } catch (Exception e) {

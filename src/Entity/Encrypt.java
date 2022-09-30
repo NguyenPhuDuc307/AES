@@ -91,6 +91,6 @@ public class Encrypt {
 
     @Override
     public String toString() {
-        return "Encrypt{" + "IdEncrypt=" + IdEncrypt + ", UserCreated=" + UserCreated + ", DateTimeCreated=" + DateTimeCreated + ", Encrypt=" + Encrypt + ", Key=" + Key + '}';
+        return IdEncrypt + "\n" + UserCreated + "\n" + DateTimeCreated + "\n" + Encrypt + "\n" + Key;
     }
 }
