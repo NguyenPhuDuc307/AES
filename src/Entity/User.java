@@ -10,10 +10,10 @@ package Entity;
  */
 public class User {
 
-    private int IdUser;
+    private int UserId;
     private String Username;
     private String Password;
-    private String FullName;
+    private int Roles;
 
     public User() {
     }
@@ -23,25 +23,26 @@ public class User {
         this.Password = Password;
     }
     
-    public User(String Username, String Password, String FullName) {
+    public User(String Username, String Password, int Roles) {
         this.Username = Username;
         this.Password = Password;
-        this.FullName = FullName;
+        this.Roles = Roles;
     }
 
-    public User(int IdUser, String Username, String Password, String FullName) {
-        this.IdUser = IdUser;
+
+    public User(int UserId, String Username, String Password, int Roles) {
+        this.UserId = UserId;
         this.Username = Username;
         this.Password = Password;
-        this.FullName = FullName;
+        this.Roles = Roles;
     }
 
-    public int getIdUser() {
-        return IdUser;
+    public int getUserId() {
+        return UserId;
     }
 
-    public void setIdUser(int IdUser) {
-        this.IdUser = IdUser;
+    public void setUserId(int UserId) {
+        this.UserId = UserId;
     }
 
     public String getUsername() {
@@ -59,17 +60,17 @@ public class User {
     public void setPassword(String Password) {
         this.Password = Password;
     }
-
-    public String getFullName() {
-        return FullName;
+    
+    public int getRoles() {
+        return Roles;
     }
 
-    public void setFullName(String FullName) {
-        this.FullName = FullName;
+    public void setRoles(int Roles) {
+        this.Roles = Roles;
     }
 
     @Override
     public String toString() {
-        return "User{" + "IdUser=" + IdUser + ", Username=" + Username + ", Password=" + Password + ", FullName=" + FullName + '}';
+        return "User{" + "UserId=" + UserId + ", Username=" + Username + ", Password=" + Password + ", Roles=" + Roles + '}';
     }
 }

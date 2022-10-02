@@ -4,6 +4,7 @@
  */
 package Server;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -32,8 +33,7 @@ public class Server {
                 new ServerThread(socket, "Client" + i);
                 System.out.printf("Thread for Client # %d generating...%n", i++);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 

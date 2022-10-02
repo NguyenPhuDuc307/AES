@@ -5,7 +5,7 @@ import javax.swing.*;
 
 public class SQLServerConnection {
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         try {
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             String URL = "jdbc:sqlserver://localhost:1433; databaseName=AES; user=sa; password=Phuduc@30072001";

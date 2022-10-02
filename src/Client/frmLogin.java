@@ -20,11 +20,13 @@ public class frmLogin extends javax.swing.JFrame {
     private Socket socket = null;
     private PrintWriter out = null;
     private Scanner in = null;
-    
+
     public static String USERNAME;
+    public static int ROLES;
 
     public frmLogin() {
         initComponents();
+        setResizable(false);
     }
 
     /**
@@ -34,34 +36,50 @@ public class frmLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jDesktopPane1 = new javax.swing.JDesktopPane();
         jLabel1 = new javax.swing.JLabel();
-        txtPass = new javax.swing.JPasswordField();
-        txtUser = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        txtUser = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
+        txtPass = new javax.swing.JPasswordField();
+        checkShow = new javax.swing.JCheckBox();
         btnLogin = new javax.swing.JButton();
         btnExit = new javax.swing.JButton();
-        checkShow = new javax.swing.JCheckBox();
-        btnR = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login");
 
-        jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 204, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Đăng nhập");
+        jLabel1.setText("ĐĂNG NHẬP");
 
-        txtPass.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Tên đăng nhập");
 
         txtUser.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
-        jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        jLabel2.setText("Tên đăng nhập");
-
         jLabel3.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Mật khẩu");
 
-        btnLogin.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        btnLogin.setText("Đăng nhập");
+        txtPass.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        checkShow.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        checkShow.setForeground(new java.awt.Color(255, 255, 255));
+        checkShow.setText("Hiện mật khẩu");
+        checkShow.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkShowActionPerformed(evt);
+            }
+        });
+
+        btnLogin.setBackground(new java.awt.Color(255, 204, 102));
+        btnLogin.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 18)); // NOI18N
+        btnLogin.setForeground(new java.awt.Color(255, 255, 255));
+        btnLogin.setText("ĐĂNG NHẬP");
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
@@ -76,70 +94,81 @@ public class frmLogin extends javax.swing.JFrame {
             }
         });
 
-        checkShow.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        checkShow.setText("Hiện mật khẩu");
-        checkShow.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                checkShowActionPerformed(evt);
-            }
-        });
+        jLabel4.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Nếu chưa có tài khoản, vui lòng liên hệ quản trị viên.");
 
-        btnR.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        btnR.setText("Đăng ký");
-        btnR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnRActionPerformed(evt);
-            }
-        });
+        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtUser, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtPass, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(checkShow, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnLogin, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnExit, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
+        jDesktopPane1.setLayout(jDesktopPane1Layout);
+        jDesktopPane1Layout.setHorizontalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnExit))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addComponent(jLabel3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(checkShow)
+                                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtPass)))
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(95, 95, 95)))
+                .addGap(6, 6, 6))
+        );
+        jDesktopPane1Layout.setVerticalGroup(
+            jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1)
+                .addGap(56, 56, 56)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkShow)
+                .addGap(18, 18, 18)
+                .addComponent(btnLogin)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnExit)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(checkShow)
-                                .addGap(0, 182, Short.MAX_VALUE))
-                            .addComponent(txtUser)
-                            .addComponent(txtPass)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnR)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnExit)))
-                .addContainerGap())
+            .addComponent(jDesktopPane1)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(56, 56, 56)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(3, 3, 3)
-                .addComponent(checkShow)
-                .addGap(18, 18, 18)
-                .addComponent(btnLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnExit)
-                    .addComponent(btnR))
-                .addContainerGap())
+            .addComponent(jDesktopPane1)
         );
 
         pack();
@@ -159,32 +188,33 @@ public class frmLogin extends javax.swing.JFrame {
         // TODO add your handling code here:
         String username = txtUser.getText().trim();
         String pass = String.valueOf(txtPass.getPassword()).trim();
-        
+
         // nếu thông tin không đầy đủ
         if (username.isEmpty() || pass.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Vui lòng điền đầy đủ thông tin đăng nhập!");
         } else {
             USERNAME = username;
-            
+
             // nối thông tin gửi đi thành một chuỗi
-            String inputString = StringHandling.StringHandling.stringSoncatenation("0", "login", "0", username, pass);
+            String inputString = StringHandling.StringHandling.stringSoncatenation("login", username, pass);
 
             // chuyển thông tin về dạng byte
             byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
             String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
-            
+
             // kết quả trả về tại đây
-            boolean ketqua = false;
-            
+            String ketqua = "";
+
             try {
                 // Socket nhận tham tham số là địa chỉ IP và Host
                 socket = new Socket("127.0.0.1", 8888);
                 out = new PrintWriter(socket.getOutputStream(), true);
                 in = new Scanner(socket.getInputStream());
                 out.println(inputBase64);
-                
-                // lấy ra kết qua kiểu boolean
-                ketqua = Boolean.parseBoolean(in.nextLine().trim());
+
+                // lấy ra kết quả
+                ketqua = String.valueOf(in.nextLine());
+
                 socket.close();
             } catch (Exception e) {
                 try {
@@ -196,30 +226,24 @@ public class frmLogin extends javax.swing.JFrame {
                 }
                 e.printStackTrace();
             }
-            
-            
+
             // nếu đăng nhập thành công
-            if (ketqua == true) {
+            if (ketqua.equals("1") || ketqua.equals("2") || ketqua.equals("3")) {
+                ROLES = Integer.parseInt(ketqua);
                 JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
                 frmMain frm = new frmMain();
                 frm.setVisible(true);
                 this.setVisible(false);
             } else {
-                JOptionPane.showMessageDialog(null, "Tài khoản hoặc mật khẩu không đúng!");
+                JOptionPane.showMessageDialog(null, ketqua);
             }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
         // TODO add your handling code here:
-        dispose();
+        System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
-
-    private void btnRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRActionPerformed
-        // TODO add your handling code here:
-        frmRegister frm = new frmRegister();
-        frm.setVisible(true);
-    }//GEN-LAST:event_btnRActionPerformed
 
     /**
      * @param args the command line arguments
@@ -260,11 +284,12 @@ public class frmLogin extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton btnR;
     private javax.swing.JCheckBox checkShow;
+    private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPasswordField txtPass;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables

@@ -5,11 +5,10 @@
 package StringHandling;
 
 import Data.DBAccess;
-import Entity.Encrypt;
-import java.awt.List;
+import Entity.Employee;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,57 +16,6 @@ import javax.swing.table.DefaultTableModel;
  * @author nguyenphuduc
  */
 public class StringHandling {
-
-    static int i, j, k, c = 0, w;
-
-    // đếm số lượng xuất hiện ký tự
-    public static String frequencyCount(String s) {
-
-        String result = "";
-
-        char[] z = new char[s.length()];
-        for (w = 0; w < s.length(); w++) {
-            z[w] = s.charAt(w);
-        }
-        for (i = 0; i < w; i++) {
-            char ch = z[i];
-            for (j = i + 1; j < w; j++) {
-                if (z[j] == ch) {
-                    for (k = j; k < (w - 1); k++) {
-                        z[k] = z[k + 1];
-                    }
-                    w--;
-                    j = i;
-                }
-            }
-        }
-
-        int[] t = new int[w];
-        for (i = 0; i < w; i++) {
-            for (j = 0, c = 0; j < s.length(); j++) {
-                if (z[i] == s.charAt(j)) {
-                    c++;
-                }
-            }
-            t[i] = c;
-            if (i == 0) {
-                if (String.valueOf(z[i]).equals(" ")) {
-                    result += "Số lần xuất hiện của [khoảng trắng] trong chuỗi: " + c;
-                } else if (String.valueOf(z[i]).equals("\n")) {
-                    result += "Số lần xuất hiện [xuống dòng] trong chuỗi: " + c;
-                } else {
-                    result += "Số lần xuất hiện của " + z[i] + " trong chuỗi: " + c;
-                }
-            } else if (String.valueOf(z[i]).equals(" ")) {
-                result += "\nSố lần xuất hiện của [khoảng trắng] trong chuỗi: " + c;
-            } else if (String.valueOf(z[i]).equals("\n")) {
-                result += "\nSố lần xuất hiện [xuống dòng] trong chuỗi: " + c;
-            } else {
-                result += "\nSố lần xuất hiện của " + z[i] + " trong chuỗi: " + c;
-            }
-        }
-        return result;
-    }
 
     // nối chuỗi
     public static String stringSoncatenation(String s1, String s2) {
@@ -85,15 +33,27 @@ public class StringHandling {
     public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5) {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5;
     }
+    
+    public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6) {
+        return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6;
+    }
+    
+    public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7) {
+        return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7;
+    }
+    
+    public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8) {
+        return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7 + "\n" + s8;
+    }
 
     // lấy ra đoạn string từ array
     public static String getString(String[] arrStrings, int begin, int end) {
         String string = "";
         for (int i = begin; i < end; i++) {
             if (i != begin) {
-                string += "\n" + arrStrings[i].toString();
+                string += "\n" + arrStrings[i];
             } else {
-                string += arrStrings[i].toString();
+                string += arrStrings[i];
             }
 
         }
@@ -108,41 +68,75 @@ public class StringHandling {
         return inputBase64;
     }
 
-    // chuyển list thành chuỗi
-    public static String getStringEncrypt() {
+    //chuyển list Employee thành chuỗi
+    public static String getStringEmployee() {
         String string = "";
-        ArrayList<Encrypt> listEncrypt = DBAccess.getAllEncrypt();
+        List<Employee> listEmployees = DBAccess.getAllEmployees();
 
-        for (Encrypt encrypt : listEncrypt) {
-            string += encrypt + "\n";
+        for (Employee employee : listEmployees) {
+            string += employee + "\n";
         }
 
         return string.substring(0, string.length() - 1);
     }
-    
+
     // chuyển chuỗi thành model
-    public static void getDefaultTableModel(DefaultTableModel model, String string) {
+    public static void getDefaultTableModel_Employee(DefaultTableModel model, String string) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 7;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
 
-        for (int i = 0; i < arrString.length; i += 5) {
+        for (int i = 0; i < arrString.length; i += COLUMN) {
 
             // tạo ra đối tượng object
-            Object[] row = new Object[5];
-            for (int j = i; j < i + 5; j++) {
+            Object[] row = new Object[COLUMN - 1];
+            for (int j = i; j < i + COLUMN; j++) {
 
-                if (j % 5 == 0) {
-                    row[0] = String.valueOf(arrString[j]);
-                } else if (j % 5 == 1) {
-                    row[1] = String.valueOf(arrString[j]);
-                } else if (j % 5 == 2) {
-                    row[2] = String.valueOf(arrString[j]);
-                } else if (j % 5 == 3) {
-                    row[3] = String.valueOf(arrString[j]);
-                } else if (j % 5 == 4) {
-                    row[4] = String.valueOf(arrString[j]);
+                switch (j % COLUMN) {
+                    case 0:
+                        row[0] = String.valueOf(arrString[j]);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        row[1] = String.valueOf(arrString[j]);
+                        break;
+                    case 3:
+                        row[2] = String.valueOf(arrString[j]);
+                        break;
+                    case 4:
+                        row[3] = String.valueOf(arrString[j]);
+                        break;
+                    case 5:
+                        if (null == String.valueOf(arrString[j])) {
+                            row[4] = "Khác";
+                        } else {
+                            switch (String.valueOf(arrString[j])) {
+                                case "1":
+                                    row[4] = "Nam";
+                                    break;
+                                case "2":
+                                    row[4] = "Nữ";
+                                    break;
+                                default:
+                                    row[4] = "Khác";
+                                    break;
+                            }
+                        }
+                        break;
+                    case 6:
+                        row[5] = String.valueOf(arrString[j]);
+                        break;
+                    default:
+                        break;
                 }
+
             }
             // lưu vào danh sách
             model.addRow(row);
@@ -151,18 +145,6 @@ public class StringHandling {
 
     public static void main(String[] args) {
 
-        StringHandling afs = new StringHandling();
-
-        String string = afs.frequencyCount("int[] t = new int[w];\n"
-                + "        for (i = 0; i < w; i++) {\n"
-                + "            for (j = 0, c = 0; j < s.length(); j++) {\n"
-                + "                if (z[i] == s.charAt(j)) {\n"
-                + "                    c++;\n"
-                + "                }\n"
-                + "            }\n"
-                + "            t[i] = c;\n");
-
-        System.out.println(string);
     }
 
 }

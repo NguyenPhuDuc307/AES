@@ -1,84 +1,20 @@
-package Client;
-
-import Data.DBAccess;
-import Entity.Encrypt;
-import java.io.PrintWriter;
-import java.net.Socket;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Scanner;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+package Client;
+
 /**
  *
  * @author nguyenphuduc
  */
-public final class frmMain extends javax.swing.JFrame {
-
-    private Socket socket = null;
-    private PrintWriter out = null;
-    private Scanner in = null;
-
-    public void show_encrypt() {
-
-        // nối thông tin gửi đi thành một chuỗi
-        String inputString = StringHandling.StringHandling.stringSoncatenation("0", "getlist", "0", "0");
-
-        // chuyển thông tin về dạng byte
-        byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
-        String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
-
-        // kết quả trả về tại đây
-        String ketqua = "";
-
-        try {
-            // Socket nhận tham tham số là địa chỉ IP và Host
-            socket = new Socket("127.0.0.1", 8888);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new Scanner(socket.getInputStream());
-            out.println(inputBase64);
-
-            // lấy ra kết quả từ server rồi giải mã về string
-            ketqua = in.nextLine().trim();
-            String outputString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
-
-            if (!outputString.equals("null")) {
-
-                // tạo ra biến chứa danh sách để đẩy lên table
-                DefaultTableModel model = (DefaultTableModel) Display_En.getModel();
-                
-                // thêm vào model từ chuỗi
-                StringHandling.StringHandling.getDefaultTableModel(model, outputString);
-                
-                socket.close();
-            } else {
-                JOptionPane.showMessageDialog(null, "Cơ sở dữ liệu trống");
-            }
-
-        } catch (Exception e) {
-            try {
-                if (socket != null) {
-                    socket.close();
-                }
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            e.printStackTrace();
-        }
-    }
+public class frmMain extends javax.swing.JFrame {
 
     /**
-     * Creates new form Main
+     * Creates new form frmMain
      */
     public frmMain() {
         initComponents();
-        show_encrypt();
     }
 
     /**
@@ -88,96 +24,22 @@ public final class frmMain extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        Display_En = new javax.swing.JTable();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
-        btnMaHoa = new javax.swing.JMenuItem();
-        btnGiaiMa = new javax.swing.JMenuItem();
-        btnThoat = new javax.swing.JMenuItem();
-
-        jMenuItem1.setText("jMenuItem1");
-
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        Display_En.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "IdEncrypt", "UserCteated", "DateTimeCteated", "Encrypt", "Key"
-            }
-        ));
-        jScrollPane1.setViewportView(Display_En);
-
-        jMenuBar1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-
-        jMenu2.setText("Tuỳ chọn");
-        jMenu2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-
-        btnMaHoa.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        btnMaHoa.setText("Mã hoá văn bản AES");
-        btnMaHoa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMaHoaActionPerformed(evt);
-            }
-        });
-        jMenu2.add(btnMaHoa);
-
-        btnGiaiMa.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        btnGiaiMa.setText("Giải mã văn bản với AES");
-        btnGiaiMa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGiaiMaActionPerformed(evt);
-            }
-        });
-        jMenu2.add(btnGiaiMa);
-
-        btnThoat.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        btnThoat.setText("Thoát");
-        btnThoat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnThoatActionPerformed(evt);
-            }
-        });
-        jMenu2.add(btnThoat);
-
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 779, Short.MAX_VALUE)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 511, Short.MAX_VALUE)
+            .addGap(0, 300, Short.MAX_VALUE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMaHoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMaHoaActionPerformed
-        // TODO add your handling code here:
-        Client.frmEncrypt frm = new Client.frmEncrypt();
-        frm.setVisible(true);
-    }//GEN-LAST:event_btnMaHoaActionPerformed
-
-    private void btnGiaiMaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGiaiMaActionPerformed
-        // TODO add your handling code here:
-        Client.frmDecrypt frm = new Client.frmDecrypt();
-        frm.setVisible(true);
-    }//GEN-LAST:event_btnGiaiMaActionPerformed
-
-    private void btnThoatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThoatActionPerformed
-        // TODO add your handling code here:
-        dispose();
-    }//GEN-LAST:event_btnThoatActionPerformed
 
     /**
      * @param args the command line arguments
@@ -205,9 +67,6 @@ public final class frmMain extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(frmMain.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -218,13 +77,5 @@ public final class frmMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable Display_En;
-    private javax.swing.JMenuItem btnGiaiMa;
-    private javax.swing.JMenuItem btnMaHoa;
-    private javax.swing.JMenuItem btnThoat;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

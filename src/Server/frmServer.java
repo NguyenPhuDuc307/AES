@@ -4,21 +4,18 @@
  */
 package Server;
 
-import java.net.ServerSocket;
-
 /**
  *
  * @author nguyenphuduc
  */
 public class frmServer extends javax.swing.JFrame {
 
-    private ServerSocket server = null;
-
     /**
      * Creates new form frmServer
      */
     public frmServer() {
         initComponents();
+        setResizable(false);
     }
 
     /**
@@ -38,11 +35,11 @@ public class frmServer extends javax.swing.JFrame {
         jDesktopPane1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 153, 51));
+        jLabel1.setForeground(new java.awt.Color(255, 204, 102));
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("SERVER IS RUNNING");
 
-        btnEnd.setBackground(new java.awt.Color(153, 0, 51));
+        btnEnd.setBackground(new java.awt.Color(255, 204, 102));
         btnEnd.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 18)); // NOI18N
         btnEnd.setForeground(new java.awt.Color(255, 255, 255));
         btnEnd.setText("Stop and Exit");
@@ -72,7 +69,7 @@ public class frmServer extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnEnd)
-                .addContainerGap(90, Short.MAX_VALUE))
+                .addContainerGap(57, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -126,7 +123,6 @@ public class frmServer extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new frmServer().setVisible(true);
-
             }
         });
 

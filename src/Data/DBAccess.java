@@ -1,154 +1,131 @@
 package Data;
 
-import Entity.Encrypt;
+import Entity.Employee;
 import Entity.User;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
- * @author nguyenphuduc
+ * @author nguye
  */
 public class DBAccess {
 
-    private static Connection connection;
-    private static Statement statement;
-    private static ResultSet resultSet = null;
+    static Connection connection = SQLServerConnection.getConnection();
+    static PreparedStatement preparedStatement = null;
+    static ResultSet resultSet = null;
 
-    public DBAccess() {
+    // Login
+    public static String Login(User user) {
+        String query = "EXEC SP_Login ?, ?";
         try {
-            SQLServerConnection sqlConnection = new SQLServerConnection();
-            connection = sqlConnection.getConnection();
-            statement = connection.createStatement();
-        } catch (Exception e) {
-        }
-    }
-
-    public int Update(String string) {
-        try {
-            int i = statement.executeUpdate(string);
-            return i;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
-
-    public ResultSet Query(String string) {
-        try {
-            resultSet = statement.executeQuery(string);
-            return resultSet;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    // kiểm tra trùng lặp username
-    public static boolean checkUserName(String username) throws SQLException {
-        String query = "select * from tb_User where Username = '" + username + "'";
-        DBAccess data = new DBAccess();
-        resultSet = data.Query(query);
-        if (resultSet.next()) {
-            return true;
-        }
-        return false;
-    }
-
-    // đăng ký tài khoản
-    public static boolean Register(User user) throws SQLException {
-        String query = "insert into tb_User values('" + user.getUsername() + "','" + user.getPassword() + "',N'" + user.getFullName() + "')";
-        DBAccess data = new DBAccess();
-        int result = data.Update(query);
-        if (result != 0) {
-            return true;
-        }
-        return false;
-    }
-
-    // đăng nhập tài khoản
-    public static boolean Login(User user) {
-        String query = "select * from tb_User where Username = '" + user.getUsername() + "' and [Password] = '" + user.getPassword() + "'";
-        try {
-            DBAccess data = new DBAccess();
-            resultSet = data.Query(query);
-
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                return true;
+                return resultSet.getString(4);
             } else {
-                return false;
+                return "Đăng nhập thất bại, vui lòng kiểm tra lại thông tin đăng nhập!";
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
-        return false;
     }
 
-    // lấy ra IdUser từ Username
-    public static int getIdUserByUserName(String username) {
-        String query = "select * from tb_User where Username = '" + username + "'";
-        DBAccess acc = new DBAccess();
-
+    // Register
+    public static String Register(User user) {
+        String query = "EXEC SP_Register ?, ?, ?";
         try {
-            ResultSet rs = acc.Query(query);
-            if (rs.next()) {
-                return rs.getInt(1);
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, user.getUsername());
+            preparedStatement.setString(2, user.getPassword());
+            preparedStatement.setInt(3, user.getRoles());
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Đăng ký tài khoản thành công!";
             } else {
-                return 0;
+                return "Đăng ký tài khoản thất bại, vui lòng kiểm tra lại thông tin đăng ký!";
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
-        return 0;
     }
 
     // lấy danh sách mã hoá
-    public static ArrayList<Encrypt> getAllEncrypt() {
-        ArrayList<Encrypt> list = new ArrayList<>();
-        String query = "select e.IdEncrypt, u.FullName, e.DateTimeCreated, e.Encrypt, e.[Key] from tb_Encrypt e, tb_User u WHERE e.UserCreated = u.IdUser";
-        DBAccess acc = new DBAccess();
-
+    public static List<Employee> getAllEmployees() {
+        List<Employee> list = new ArrayList<>();
+        String query = "EXEC SP_GetEmployees";
         try {
-            resultSet = acc.Query(query);
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                list.add(new Encrypt(
-                        resultSet.getInt(1),
-                        resultSet.getString(2),
+                list.add(new Employee(
+                        resultSet.getString(1),
+                        resultSet.getInt(2),
                         resultSet.getString(3),
                         resultSet.getString(4),
-                        resultSet.getString(5)));
+                        resultSet.getString(5),
+                        resultSet.getInt(6),
+                        resultSet.getString(7)));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
         }
         return list;
     }
 
-    // đăng ký tài khoản
-    public static boolean Encrypt(Encrypt encrypt) throws SQLException {
-        String query = "insert into tb_Encrypt values('" + encrypt.getUserCreated() + "','" + encrypt.getDateTimeCreated() + "','" + encrypt.getEncrypt() + "','" + encrypt.getKey() + "')";
-        DBAccess data = new DBAccess();
-        int result = data.Update(query);
-        if (result != 0) {
-            return true;
+    // Get Employee By EmloyeeId
+    public static Employee getEmployeeById(String EmployId) {
+        String query = "EXEC SP_getEmployeeById ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, EmployId);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return new Employee(
+                        resultSet.getString(1),
+                        resultSet.getInt(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(6),
+                        resultSet.getString(7));
+            }
+        } catch (SQLException e) {
         }
-        return false;
+        return null;
     }
 
-    public static void main(String[] args) throws SQLException {
-        User user = new User("nguyenphuduc", "123", "Nguyễn Phú Đức");
+    // Update Employee
+    public static String updateEmployee(Employee employee) {
+        String query = "EXEC SP_UpDateEmployee ?,?,?,?,?,?,? ";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, employee.getEmployeeId());
+            preparedStatement.setInt(2, employee.getUserId());
+            preparedStatement.setString(3, employee.getFullName());
+            preparedStatement.setString(4, employee.getEmail());
+            preparedStatement.setString(5, employee.getPhoneNumber());
+            preparedStatement.setInt(6, employee.getSex());
+            preparedStatement.setString(7, employee.getAddress());
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Cập nhật thông tin thành công!";
+            } else {
+                return "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
 
-        boolean check = DBAccess.Login(user);
-        boolean check1 = DBAccess.checkUserName("admin");
-
-        System.out.println(0%5);
-        System.out.println(1%5);
-        System.out.println(2%5);
-        System.out.println(3%5);
-        System.out.println(4%5);
-        
-        System.out.println(StringHandling.StringHandling.getStringEncrypt());
-        
-        System.out.println(check);
-        System.out.println(check1);
+    public static void main(String[] args) {
+        Employee employee = new Employee("NV1", 1347, "Nguyễn Phú Đức", "phuduc@gmail.com", "0987654321", 1, "TPHCM");
+        System.out.println(updateEmployee(employee));
     }
 
 }
