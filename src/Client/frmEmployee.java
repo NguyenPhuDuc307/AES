@@ -4,13 +4,16 @@
  */
 package Client;
 
+import Entity.Employee;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +33,8 @@ public final class frmEmployee extends javax.swing.JFrame {
 
     private static int Sex = 0;
     private static int UserId = 0;
+
+    public static List<Employee> listEmployees = new ArrayList<Employee>();
 
     private void EnableTxt(boolean b) {
         txtAddess.setEnabled(b);
@@ -52,8 +57,9 @@ public final class frmEmployee extends javax.swing.JFrame {
         initComponents();
 
         txtId.setEnabled(false);
+        txtTrangthai.setEnabled(false);
 
-        tb_Employee.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ"}) {
+        tb_Employee.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -106,8 +112,9 @@ public final class frmEmployee extends javax.swing.JFrame {
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
             DefaultTableModel model = (DefaultTableModel) tb_Employee.getModel();
-
             StringHandling.StringHandling.getDefaultTableModel_Employee(model, ketquaString);
+
+            StringHandling.StringHandling.getList_Employee(listEmployees, ketquaString);
 
             socket.close();
         } catch (IOException e) {
@@ -149,8 +156,11 @@ public final class frmEmployee extends javax.swing.JFrame {
         rKhac = new javax.swing.JRadioButton();
         btnReload = new javax.swing.JButton();
         lbTB = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        txtTrangthai = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Quản lý nhân viên");
 
         btnEdit.setBackground(new java.awt.Color(255, 204, 153));
         btnEdit.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
@@ -187,7 +197,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ"
+                "Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái"
             }
         ));
         tb_Employee.setAlignmentY(0.9F);
@@ -272,6 +282,12 @@ public final class frmEmployee extends javax.swing.JFrame {
         lbTB.setForeground(new java.awt.Color(255, 0, 51));
         lbTB.setText("Đã khoá chỉnh sửa");
 
+        jLabel7.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Trạng thái");
+
+        txtTrangthai.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
         jDesktopPane1.setLayer(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnDelete, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSave, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -292,6 +308,8 @@ public final class frmEmployee extends javax.swing.JFrame {
         jDesktopPane1.setLayer(rKhac, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnReload, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(lbTB, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtTrangthai, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -318,16 +336,20 @@ public final class frmEmployee extends javax.swing.JFrame {
                                     .addComponent(txtName)
                                     .addComponent(txtEmail)
                                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txtTrangthai, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
+                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(lbTB)
                                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                                .addGap(22, 22, 22)
                                                 .addComponent(rNam)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(rNu)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(rKhac))
-                                            .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 499, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(rKhac)))
                                         .addGap(0, 0, Short.MAX_VALUE)))))
                         .addGap(507, 507, 507))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
@@ -353,7 +375,9 @@ public final class frmEmployee extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtTrangthai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -443,6 +467,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         rNam.setSelected(false);
         rNu.setSelected(false);
         rKhac.setSelected(false);
+        txtTrangthai.setText("");
     }//GEN-LAST:event_btnReloadActionPerformed
 
     private void tb_EmployeeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_EmployeeMouseClicked
@@ -450,69 +475,45 @@ public final class frmEmployee extends javax.swing.JFrame {
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(false);
         btnDelete.setVisible(true);
-        try {
-            // lấy dòng dl hiện tại mình đang nhấn chuột
-            int row = this.tb_Employee.getSelectedRow();
-            //lấy EmployeeID vừa nhận và ssu đó đổi sang string
-            String EmployeeID = (this.tb_Employee.getModel()).getValueAt(row, 0).toString();
 
-            // nối thông tin gửi đi thành một chuỗi
-            String inputString = StringHandling.StringHandling.stringSoncatenation("getEmployeeById", EmployeeID);
+        // lấy dòng dl hiện tại mình đang nhấn chuột
+        int row = this.tb_Employee.getSelectedRow();
+        //lấy EmployeeID vừa nhận và ssu đó đổi sang string
+        String EmployeeID = (this.tb_Employee.getModel()).getValueAt(row, 0).toString();
 
-            // chuyển thông tin về dạng byte
-            byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
-            String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+        txtId.setText(tb_Employee.getValueAt(row, 0).toString());
+        txtName.setText(tb_Employee.getValueAt(row, 1).toString());
+        txtAddess.setText(tb_Employee.getValueAt(row, 5).toString());
+        txtSDT.setText(tb_Employee.getValueAt(row, 3).toString());
+        txtEmail.setText(tb_Employee.getValueAt(row, 2).toString());
+        txtTrangthai.setText(tb_Employee.getValueAt(row, 6).toString());
 
-            // kết quả trả về tại đây
-            String ketqua = "";
+        if (tb_Employee.getValueAt(row, 6).toString().equals("Đang làm")) {
+            btnDelete.setText("Đình chỉ");
+        } else {
+            btnDelete.setText("Hoàn tác đình chỉ");
+        }
 
-            // Socket nhận tham tham số là địa chỉ IP và Host
-            socket = new Socket("127.0.0.1", 8888);
-            out = new PrintWriter(socket.getOutputStream(), true);
-            in = new Scanner(socket.getInputStream());
-            out.println(inputBase64);
+        Employee employee = StringHandling.StringHandling.getEmployee(listEmployees, EmployeeID);
 
-            // lấy ra kết quả
-            ketqua = String.valueOf(in.nextLine());
+        UserId = employee.getUserId();
+        Sex = employee.getSex();
 
-            // lấy chuỗi string từ chuỗi byte
-            String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
-
-            String arrString[] = ketquaString.split("\n");
-            txtId.setText(arrString[0]);
-            txtName.setText(arrString[2]);
-            txtAddess.setText(arrString[6]);
-            txtSDT.setText(arrString[4]);
-            txtEmail.setText(arrString[3]);
-
-            Sex = Integer.parseInt(arrString[5]);
-            UserId = Integer.parseInt(arrString[1]);
-
-            switch (arrString[5]) {
-                case "1" -> {
-                    rNam.setSelected(true);
-                    rNu.setSelected(false);
-                    rKhac.setSelected(false);
-                }
-                case "2" -> {
-                    rNam.setSelected(false);
-                    rNu.setSelected(true);
-                    rKhac.setSelected(false);
-                }
-                default -> {
-                    rNam.setSelected(false);
-                    rNu.setSelected(false);
-                    rKhac.setSelected(true);
-                }
+        switch (tb_Employee.getValueAt(row, 4).toString()) {
+            case "Nam" -> {
+                rNam.setSelected(true);
+                rNu.setSelected(false);
+                rKhac.setSelected(false);
             }
-
-            socket.close();
-        } catch (IOException e) {
-            try {
-                if (socket != null) {
-                    socket.close();
-                }
-            } catch (IOException ex) {
+            case "Nu" -> {
+                rNam.setSelected(false);
+                rNu.setSelected(true);
+                rKhac.setSelected(false);
+            }
+            default -> {
+                rNam.setSelected(false);
+                rNu.setSelected(false);
+                rKhac.setSelected(true);
             }
         }
     }//GEN-LAST:event_tb_EmployeeMouseClicked
@@ -532,10 +533,16 @@ public final class frmEmployee extends javax.swing.JFrame {
         String sdt = txtSDT.getText();
         String diachi = txtAddess.getText();
         String id = txtId.getText();
+        String trangThai;
+        if (txtTrangthai.getText().equals("Đang làm")) {
+            trangThai = "true";
+        } else {
+            trangThai = "false";
+        }
 
         if (!id.isEmpty()) {
             // nối thông tin gửi đi thành một chuỗi
-            String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi);
+            String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai);
 
             // chuyển thông tin về dạng byte
             byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -588,7 +595,62 @@ public final class frmEmployee extends javax.swing.JFrame {
                     JOptionPane.OK_CANCEL_OPTION);
 
             if (input == 0) {
+                String name = txtName.getText();
+                String email = txtEmail.getText();
+                String sdt = txtSDT.getText();
+                String diachi = txtAddess.getText();
+                String id = txtId.getText();
+                String trangThai;
+                if (txtTrangthai.getText().equals("Nghỉ việc")) {
+                    trangThai = "true";
+                } else {
+                    trangThai = "false";
+                }
 
+                if (!id.isEmpty()) {
+                    // nối thông tin gửi đi thành một chuỗi
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai);
+
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+
+                    // kết quả trả về tại đây
+                    String ketqua = "";
+
+                    try {
+                        // Socket nhận tham tham số là địa chỉ IP và Host
+                        socket = new Socket("127.0.0.1", 8888);
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        in = new Scanner(socket.getInputStream());
+                        out.println(inputBase64);
+
+                        // lấy ra kết quả
+                        ketqua = String.valueOf(in.nextLine());
+
+                        // lấy chuỗi string từ chuỗi byte
+                        String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+
+                        show_employee();
+
+                        JOptionPane.showMessageDialog(null, ketquaString);
+
+                        EnableTxt(false);
+                        btnDelete.setVisible(false);
+                        btnSave.setVisible(false);
+                        txtSDT.setText("");
+                        txtAddess.setText("");
+                        txtEmail.setText("");
+                        txtId.setText("");
+                        txtName.setText("");
+                        rNam.setSelected(false);
+                        rNu.setSelected(false);
+                        rKhac.setSelected(false);
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(frmEmployee.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             }
         }
 
@@ -640,6 +702,7 @@ public final class frmEmployee extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTB;
     private javax.swing.JRadioButton rKhac;
@@ -651,5 +714,6 @@ public final class frmEmployee extends javax.swing.JFrame {
     private javax.swing.JTextField txtId;
     private javax.swing.JTextField txtName;
     private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtTrangthai;
     // End of variables declaration//GEN-END:variables
 }

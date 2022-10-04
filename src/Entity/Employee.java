@@ -12,16 +12,18 @@ public class Employee {
 
     private String EmployeeId;
     private int UserId;
+    private String UserName;
     private String FullName ;
     private String Email ;
     private String PhoneNumber ;
     private int Sex ;
     private String Address ;
+    private boolean Enable;
 
     public Employee() {
     }
 
-    public Employee(String EmployeeId, int UserId, String FullName, String Email, String PhoneNumber, int Sex, String Address) {
+    public Employee(String EmployeeId, int UserId, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
         this.EmployeeId = EmployeeId;
         this.UserId = UserId;
         this.FullName = FullName;
@@ -29,6 +31,18 @@ public class Employee {
         this.PhoneNumber = PhoneNumber;
         this.Sex = Sex;
         this.Address = Address;
+        this.Enable = Enable;
+    }
+    
+    public Employee(String EmployeeId, String UserName, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
+        this.EmployeeId = EmployeeId;
+        this.UserName = UserName;
+        this.FullName = FullName;
+        this.Email = Email;
+        this.PhoneNumber = PhoneNumber;
+        this.Sex = Sex;
+        this.Address = Address;
+        this.Enable = Enable;
     }
 
     public String getEmployeeId() {
@@ -45,6 +59,14 @@ public class Employee {
 
     public void setUserId(int UserId) {
         this.UserId = UserId;
+    }
+
+    public String getUserName() {
+        return UserName;
+    }
+
+    public void setUserName(String UserName) {
+        this.UserName = UserName;
     }
 
     public String getFullName() {
@@ -87,8 +109,16 @@ public class Employee {
         this.Address = Address;
     }
 
+    public boolean isEnable() {
+        return Enable;
+    }
+
+    public void setEnable(boolean Enable) {
+        this.Enable = Enable;
+    }
+
     @Override
     public String toString() {
-        return EmployeeId + "\n" + UserId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address;
+        return EmployeeId + "\n" + UserId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address + "\n" + Enable;
     }
 }

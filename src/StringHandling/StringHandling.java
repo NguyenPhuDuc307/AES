@@ -9,6 +9,8 @@ import Entity.Employee;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -33,17 +35,25 @@ public class StringHandling {
     public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5) {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5;
     }
-    
+
     public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6) {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6;
     }
-    
+
     public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7) {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7;
     }
-    
+
     public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8) {
         return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7 + "\n" + s8;
+    }
+
+    public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8, String s9) {
+        return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7 + "\n" + s8 + "\n" + s9;
+    }
+
+    public static String stringSoncatenation(String s1, String s2, String s3, String s4, String s5, String s6, String s7, String s8, String s9, String s10) {
+        return s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5 + "\n" + s6 + "\n" + s7 + "\n" + s8 + "\n" + s9 + "\n" + s10;
     }
 
     // lấy ra đoạn string từ array
@@ -87,7 +97,7 @@ public class StringHandling {
             model.removeRow(0);
         }
 
-        int COLUMN = 7;
+        int COLUMN = 8;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
@@ -133,6 +143,13 @@ public class StringHandling {
                     case 6:
                         row[5] = String.valueOf(arrString[j]);
                         break;
+                    case 7:
+                        if (String.valueOf(arrString[j]).equals("true")) {
+                            row[6] = "Đang làm";
+                        } else {
+                            row[6] = "Nghỉ việc";
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -143,8 +160,118 @@ public class StringHandling {
         }
     }
 
-    public static void main(String[] args) {
+    // chuyển chuỗi thành model
+    public static void getList_Employee(List<Employee> list, String string) {
 
+        list.removeAll(list);
+
+        int COLUMN = 8;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Employee employee = new Employee();
+
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        employee.setEmployeeId(String.valueOf(arrString[j]));
+                        break;
+                    case 1:
+                        employee.setUserId(Integer.parseInt(arrString[j]));
+                    case 2:
+                        employee.setFullName(String.valueOf(arrString[j]));
+                        break;
+                    case 3:
+                        employee.setPhoneNumber(String.valueOf(arrString[j]));
+                        break;
+                    case 4:
+                        employee.setEmail(String.valueOf(arrString[j]));
+                        break;
+                    case 5:
+                        employee.setSex(Integer.parseInt(arrString[j]));
+                        break;
+                    case 6:
+                        employee.setAddress(String.valueOf(arrString[j]));
+                        break;
+                    case 7:
+                        employee.setAddress(String.valueOf(arrString[j]));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            list.add(employee);
+        }
+    }
+
+    // check passwork
+    public static boolean isValidPassword(String password) {
+
+        // Regex to check valid password.
+        String regex = "^(?=.*[0-9])"
+                + "(?=.*[a-z])(?=.*[A-Z])"
+                + "(?=.*[@#$%^&+=])"
+                + "(?=\\S+$).{8,20}$";
+
+        // Compile the ReGex
+        Pattern p = Pattern.compile(regex);
+
+        // If the password is empty
+        // return false
+        if (password == null) {
+            return false;
+        }
+
+        // Pattern class contains matcher() method
+        // to find matching between given password
+        // and regular expression.
+        Matcher m = p.matcher(password);
+
+        // Return if the password
+        // matched the ReGex
+        return m.matches();
+    }
+
+    public static Employee getEmployee(List<Employee> employees, String EmployeeID) {
+        for (Employee employee : employees) {
+            if (employee.getEmployeeId().equals(EmployeeID)) {
+                return employee;
+            }
+        }
+        return null;
+    }
+
+    public static void main(String[] args) {
+// Test Case 1:
+        String str1 = "Geeks@portal20";
+        System.out.println(isValidPassword(str1));
+
+        // Test Case 2:
+        String str2 = "Geeksforgeeks";
+        System.out.println(isValidPassword(str2));
+
+        // Test Case 3:
+        String str3 = "Geeks@ portal9";
+        System.out.println(isValidPassword(str3));
+
+        // Test Case 4:
+        String str4 = "1234";
+        System.out.println(isValidPassword(str4));
+
+        // Test Case 5:
+        String str5 = "Gfg@20";
+        System.out.println(isValidPassword(str5));
+
+        // Test Case 6:
+        String str6 = "geeks@portal20";
+        System.out.println(isValidPassword(str6));
     }
 
 }

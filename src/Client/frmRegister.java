@@ -4,6 +4,7 @@
  */
 package Client;
 
+import Entity.Employee;
 import java.awt.HeadlessException;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,6 +34,8 @@ public class frmRegister extends javax.swing.JFrame {
     public frmRegister() {
         initComponents();
         setResizable(false);
+        txtUser.setText(frmAddEmployee.employee.getEmployeeId());
+        ROLES = 0;
     }
 
     /**
@@ -56,7 +59,6 @@ public class frmRegister extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         cQuantri = new javax.swing.JRadioButton();
         cPhongcongtac = new javax.swing.JRadioButton();
-        cSinhvien = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -70,8 +72,10 @@ public class frmRegister extends javax.swing.JFrame {
             }
         });
 
+        txtExit.setBackground(new java.awt.Color(255, 102, 102));
         txtExit.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        txtExit.setText("Thoát");
+        txtExit.setForeground(new java.awt.Color(255, 255, 255));
+        txtExit.setText("Quay lại");
         txtExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtExitActionPerformed(evt);
@@ -82,6 +86,7 @@ public class frmRegister extends javax.swing.JFrame {
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Xác nhận mật khẩu");
 
+        txtUser.setEditable(false);
         txtUser.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         txtPass.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
@@ -104,7 +109,7 @@ public class frmRegister extends javax.swing.JFrame {
 
         jLabel3.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Mã nhân viên");
+        jLabel3.setText("Tên đăng nhập");
 
         jLabel4.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel4.setForeground(new java.awt.Color(255, 255, 255));
@@ -132,15 +137,6 @@ public class frmRegister extends javax.swing.JFrame {
             }
         });
 
-        cSinhvien.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        cSinhvien.setForeground(new java.awt.Color(255, 255, 255));
-        cSinhvien.setText("Sinh viên");
-        cSinhvien.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cSinhvienActionPerformed(evt);
-            }
-        });
-
         jDesktopPane1.setLayer(txtSubmit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(txtExit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -154,7 +150,6 @@ public class frmRegister extends javax.swing.JFrame {
         jDesktopPane1.setLayer(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(cQuantri, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(cPhongcongtac, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(cSinhvien, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -173,27 +168,22 @@ public class frmRegister extends javax.swing.JFrame {
                                 .addComponent(jLabel6)
                                 .addGap(28, 28, 28)
                                 .addComponent(cQuantri)
-                                .addGap(113, 113, 113)
+                                .addGap(18, 18, 18)
                                 .addComponent(cPhongcongtac)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(cSinhvien))
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
-                                    .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
-                                    .addComponent(txtPassCf, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
-                                    .addComponent(check))))
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSubmit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtPass, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                            .addComponent(txtUser, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                            .addComponent(txtPassCf, javax.swing.GroupLayout.DEFAULT_SIZE, 495, Short.MAX_VALUE)
+                            .addComponent(check))
                         .addGap(133, 133, 133))))
         );
         jDesktopPane1Layout.setVerticalGroup(
@@ -209,7 +199,6 @@ public class frmRegister extends javax.swing.JFrame {
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(cQuantri)
                     .addComponent(cPhongcongtac)
-                    .addComponent(cSinhvien)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -265,42 +254,55 @@ public class frmRegister extends javax.swing.JFrame {
             String username = txtUser.getText().trim();
             String pass = String.valueOf(txtPass.getPassword()).trim();
             String passcf = String.valueOf(txtPassCf.getPassword()).trim();
+            Employee employee = frmAddEmployee.employee;
+            String EmployID = employee.getEmployeeId();
+            String Name = employee.getFullName();
+            String Sex = String.valueOf(employee.getSex());
+            String Email = employee.getEmail();
+            String Phonenum = employee.getPhoneNumber();
+            String Address = employee.getAddress();
 
             // nếu password không trùng khớp
             if (pass.equals(passcf)) {
-                // nối thông tin gửi đi thành một chuỗi
-                String inputString = StringHandling.StringHandling.stringSoncatenation("register", username, pass, String.valueOf(ROLES));
+                if (StringHandling.StringHandling.isValidPassword(pass)) {
+                    // nối thông tin gửi đi thành một chuỗi
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("register", username, pass, String.valueOf(ROLES), EmployID, Name, Sex, Email, Phonenum, Address);
 
-                // chuyển thông tin về dạng byte
-                byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
-                String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
 
-                // kết quả trả về tại đây
-                String ketqua = "";
+                    // kết quả trả về tại đây
+                    String ketqua = "";
 
-                try {
-                    // Socket nhận tham tham số là địa chỉ IP và Host
-                    socket = new Socket("127.0.0.1", 8888);
-                    out = new PrintWriter(socket.getOutputStream(), true);
-                    in = new Scanner(socket.getInputStream());
-                    out.println(inputBase64);
-
-                    // lấy ra kết quả
-                    ketqua = String.valueOf(in.nextLine());
-
-                    socket.close();
-                } catch (IOException e) {
                     try {
-                        if (socket != null) {
-                            socket.close();
+                        // Socket nhận tham tham số là địa chỉ IP và Host
+                        socket = new Socket("127.0.0.1", 8888);
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        in = new Scanner(socket.getInputStream());
+                        out.println(inputBase64);
+
+                        // lấy ra kết quả
+                        ketqua = String.valueOf(in.nextLine());
+
+                        socket.close();
+                    } catch (IOException e) {
+                        try {
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        } catch (IOException ex) {
                         }
-                    } catch (IOException ex) {
                     }
+
+                    // nếu đăng nhập thành công
+                    JOptionPane.showMessageDialog(null, ketqua);
+                    if (ketqua.contains("thành công")) {
+                        dispose();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Hãy đảm bảo rằng mật khẩu bạn phải có cả CHỮ HOA, chữ thường, số, ký tự đặc biệt và từ 8-20 ký tự");
                 }
-
-                // nếu đăng nhập thành công
-                JOptionPane.showMessageDialog(null, ketqua);
-
             } else {
                 JOptionPane.showMessageDialog(null, "Mật khẩu xác nhận không trùng khớp");
             }
@@ -314,8 +316,6 @@ public class frmRegister extends javax.swing.JFrame {
     private void cQuantriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cQuantriActionPerformed
         // TODO add your handling code here:
         cPhongcongtac.setSelected(false);
-        cSinhvien.setSelected(false);
-
         if (cQuantri.isSelected()) {
             ROLES = 1;
         } else
@@ -325,22 +325,11 @@ public class frmRegister extends javax.swing.JFrame {
     private void cPhongcongtacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cPhongcongtacActionPerformed
         // TODO add your handling code here:
         cQuantri.setSelected(false);
-        cSinhvien.setSelected(false);
         if (cPhongcongtac.isSelected()) {
             ROLES = 2;
         } else
             ROLES = 0;
     }//GEN-LAST:event_cPhongcongtacActionPerformed
-
-    private void cSinhvienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cSinhvienActionPerformed
-        // TODO add your handling code here:
-        cQuantri.setSelected(false);
-        cPhongcongtac.setSelected(false);
-        if (cSinhvien.isSelected()) {
-            ROLES = 3;
-        } else
-            ROLES = 0;
-    }//GEN-LAST:event_cSinhvienActionPerformed
 
     /**
      * @param args the command line arguments
@@ -389,7 +378,6 @@ public class frmRegister extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButton cPhongcongtac;
     private javax.swing.JRadioButton cQuantri;
-    private javax.swing.JRadioButton cSinhvien;
     private javax.swing.JCheckBox check;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;

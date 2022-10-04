@@ -59,18 +59,32 @@ public class ServerThread implements Runnable {
                 out.println(result);
 
             } else if (funcString.equals("register")) {
-                String[] arrLogin = string.split("\n");// ngắt chuỗi string
-                String username = String.valueOf(arrLogin[0].toCharArray());// username
+                String[] arrRegister = string.split("\n");// ngắt chuỗi string
 
-                String pass = String.valueOf(arrLogin[1].toCharArray());// pass
+                String username = String.valueOf(arrRegister[0].toCharArray());// username
+                String pass = String.valueOf(arrRegister[1].toCharArray());// pass
                 String passEncrypt = AES.AES.encrypt(pass, "AES");
+                int role = Integer.parseInt(String.valueOf(arrRegister[2].toCharArray()));// role           
 
-                int role = Integer.parseInt(String.valueOf(arrLogin[2].toCharArray()));// role
                 User user = new User(username, passEncrypt, role);// Create user
 
+                String EmployID = String.valueOf(arrRegister[3]);
+                String Name = String.valueOf(arrRegister[4]);
+                int Sex = Integer.parseInt(String.valueOf(arrRegister[5]));
+                String Email = String.valueOf(arrRegister[6]);
+                String Phonenum = String.valueOf(arrRegister[7]);
+                String Address = String.valueOf(arrRegister[8]);
+
+                Employee employee = new Employee(EmployID, username, Name, Email, Phonenum, Sex, Address, true);
+
                 // hàm register
-                String result = DBAccess.Register(user);
-                out.println(result);
+                String result2 = "";
+                String result1 = DBAccess.Register(user);
+                if (result1.equals("Đăng ký tài khoản thành công!")) {
+                    result2 = DBAccess.addEmployee(employee);
+                }
+
+                out.println(result2);
 
             } else if (funcString.equals("getAllEmployee")) {
 
@@ -100,9 +114,9 @@ public class ServerThread implements Runnable {
 
                 // ngắt chuỗi
                 String arr[] = string.split("\n");
-                
+
                 //tạo biến employee
-                Employee employee = new Employee(arr[0], Integer.parseInt(arr[1]),arr[2],arr[3],arr[4],Integer.parseInt(arr[5]),arr[6]);
+                Employee employee = new Employee(arr[0], Integer.parseInt(arr[1]), arr[2], arr[3], arr[4], Integer.parseInt(arr[5]), arr[6], Boolean.parseBoolean(arr[7]));
 
                 String resultString = DBAccess.updateEmployee(employee);
 

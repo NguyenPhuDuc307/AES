@@ -11,7 +11,6 @@ package Entity;
 public class Student {
 
     private String StudentId;
-    private int UserId;
     private String ClassId ;
     private String FullName ;
     private String Email ;
@@ -22,9 +21,8 @@ public class Student {
     public Student() {
     }
 
-    public Student(String StudentId, int UserId, String ClassId, String FullName, String Email, String PhoneNumber, int Sex, String Address) {
+    public Student(String StudentId, String ClassId, String FullName, String Email, String PhoneNumber, int Sex, String Address) {
         this.StudentId = StudentId;
-        this.UserId = UserId;
         this.ClassId = ClassId;
         this.FullName = FullName;
         this.Email = Email;
@@ -39,14 +37,6 @@ public class Student {
 
     public void setStudentId(String StudentId) {
         this.StudentId = StudentId;
-    }
-
-    public int getUserId() {
-        return UserId;
-    }
-
-    public void setUserId(int UserId) {
-        this.UserId = UserId;
     }
 
     public String getClassId() {
@@ -99,6 +89,6 @@ public class Student {
 
     @Override
     public String toString() {
-        return "Student{" + "StudentId=" + StudentId + ", UserId=" + UserId + ", ClassId=" + ClassId + ", FullName=" + FullName + ", Email=" + Email + ", PhoneNumber=" + PhoneNumber + ", Sex=" + Sex + ", Address=" + Address + '}';
+        return "Student{" + "StudentId=" + StudentId + ", ClassId=" + ClassId + ", FullName=" + FullName + ", Email=" + Email + ", PhoneNumber=" + PhoneNumber + ", Sex=" + Sex + ", Address=" + Address + '}';
     }
 }

@@ -55,6 +55,30 @@ public class DBAccess {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
+    
+    // Register
+    public static String addEmployee(Employee employee) {
+        String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, ?, true";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, employee.getEmployeeId());
+            preparedStatement.setString(2, employee.getUserName());
+            preparedStatement.setString(3, employee.getFullName());
+            preparedStatement.setString(4, employee.getEmail());
+            preparedStatement.setString(5, employee.getPhoneNumber());
+            preparedStatement.setInt(6, employee.getSex());
+            preparedStatement.setString(7, employee.getAddress());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Thêm mới nhân viên thành công! Mã nhân viên [" + employee.getEmployeeId() + "]";
+            } else {
+                return "Thêm nhân viên thất bại thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
 
     // lấy danh sách mã hoá
     public static List<Employee> getAllEmployees() {
@@ -71,7 +95,8 @@ public class DBAccess {
                         resultSet.getString(4),
                         resultSet.getString(5),
                         resultSet.getInt(6),
-                        resultSet.getString(7)));
+                        resultSet.getString(7),
+                        resultSet.getBoolean(8)));
             }
         } catch (SQLException e) {
         }
@@ -93,16 +118,17 @@ public class DBAccess {
                         resultSet.getString(4),
                         resultSet.getString(5),
                         resultSet.getInt(6),
-                        resultSet.getString(7));
+                        resultSet.getString(7),
+                        resultSet.getBoolean(8));
             }
         } catch (SQLException e) {
         }
         return null;
     }
-
+    
     // Update Employee
-    public static String updateEmployee(Employee employee) {
-        String query = "EXEC SP_UpDateEmployee ?,?,?,?,?,?,? ";
+    public static String insertEmployee(Employee employee) {
+        String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, ?, ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, employee.getEmployeeId());
@@ -112,6 +138,31 @@ public class DBAccess {
             preparedStatement.setString(5, employee.getPhoneNumber());
             preparedStatement.setInt(6, employee.getSex());
             preparedStatement.setString(7, employee.getAddress());
+            preparedStatement.setBoolean(8, employee.isEnable());
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Thêm nhân viên thành công!";
+            } else {
+                return "Thêm nhân viên thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
+
+    // Update Employee
+    public static String updateEmployee(Employee employee) {
+        String query = "EXEC SP_UpDateEmployee ?,?,?,?,?,?,?,? ";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, employee.getEmployeeId());
+            preparedStatement.setInt(2, employee.getUserId());
+            preparedStatement.setString(3, employee.getFullName());
+            preparedStatement.setString(4, employee.getEmail());
+            preparedStatement.setString(5, employee.getPhoneNumber());
+            preparedStatement.setInt(6, employee.getSex());
+            preparedStatement.setString(7, employee.getAddress());
+            preparedStatement.setBoolean(8, employee.isEnable());
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
                 return "Cập nhật thông tin thành công!";
@@ -124,8 +175,8 @@ public class DBAccess {
     }
 
     public static void main(String[] args) {
-        Employee employee = new Employee("NV1", 1347, "Nguyễn Phú Đức", "phuduc@gmail.com", "0987654321", 1, "TPHCM");
-        System.out.println(updateEmployee(employee));
+        Employee employee = new Employee("NV04", 1347, "Nguyễn Phú Đức", "phuduc@gmail.com", "0987654322", 1, "TPHCM",true);
+        System.out.println(insertEmployee(employee));
     }
 
 }

@@ -11,16 +11,14 @@ package Entity;
 public class Subject {
 
     private String SubjectId;
-    private String ClassId;
     private String SubjectName;
     private int CreditsNumber;
 
     public Subject() {
     }
 
-    public Subject(String SubjectId, String ClassId, String SubjectName, int CreditsNumber) {
+    public Subject(String SubjectId, String SubjectName, int CreditsNumber) {
         this.SubjectId = SubjectId;
-        this.ClassId = ClassId;
         this.SubjectName = SubjectName;
         this.CreditsNumber = CreditsNumber;
     }
@@ -32,15 +30,7 @@ public class Subject {
     public void setSubjectId(String SubjectId) {
         this.SubjectId = SubjectId;
     }
-
-    public String getClassId() {
-        return ClassId;
-    }
-
-    public void setClassId(String ClassId) {
-        this.ClassId = ClassId;
-    }
-
+    
     public String getSubjectName() {
         return SubjectName;
     }
@@ -59,6 +49,6 @@ public class Subject {
 
     @Override
     public String toString() {
-        return "Subject{" + "SubjectId=" + SubjectId + ", ClassId=" + ClassId + ", SubjectName=" + SubjectName + ", CreditsNumber=" + CreditsNumber + '}';
+        return "Subject{" + "SubjectId=" + SubjectId + ", SubjectName=" + SubjectName + ", CreditsNumber=" + CreditsNumber + '}';
     }
 }
