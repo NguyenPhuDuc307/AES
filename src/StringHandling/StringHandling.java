@@ -6,6 +6,7 @@ package StringHandling;
 
 import Data.DBAccess;
 import Entity.Employee;
+import Entity.Class;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -87,6 +88,18 @@ public class StringHandling {
             string += employee + "\n";
         }
 
+        return string.substring(0, string.length() - 1);
+    }
+    
+    //chuyển list Employee thành chuỗi
+    public static String getStringClass() {
+        String string = "";
+        List<Class> listClasses = DBAccess.getAllCLasses();
+
+        for (Class cl : listClasses) {
+            string += cl + "\n";
+        }
+        
         return string.substring(0, string.length() - 1);
     }
 
@@ -211,6 +224,84 @@ public class StringHandling {
         }
     }
 
+    // chuyển chuỗi thành model
+    public static void getList_Class(List<Class> list, String string) {
+
+        list.removeAll(list);
+
+        int COLUMN = 3;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Class cl = new Class();
+
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        cl.setClassIdString(String.valueOf(arrString[j]));
+                        break;
+                    case 1:
+                        cl.setClassName(String.valueOf(arrString[j]));
+                    case 2:
+                        cl.setEnable(Boolean.parseBoolean(arrString[j]));
+                        break;
+                    default:
+                        break;
+                }
+            }
+            // lưu vào danh sách
+            list.add(cl);
+        }
+    }
+    
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Class(DefaultTableModel model, String string) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 3;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Object[] row = new Object[COLUMN];
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        row[0] = String.valueOf(arrString[j]);
+                        break;
+                    case 1:
+                        row[1] = String.valueOf(arrString[j]);
+                        break;
+                    case 2:
+                        if (String.valueOf(arrString[j]).equals("true")) {
+                            row[2] = "Đang học";
+                        } else {
+                            row[2] = "Đã ngưng";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            model.addRow(row);
+        }
+    }
+    
+    
     // check passwork
     public static boolean isValidPassword(String password) {
 
@@ -247,31 +338,18 @@ public class StringHandling {
         }
         return null;
     }
+    
+    public static Class getClass(List<Class> listClass, String ClassId) {
+        for (Class clas : listClass) {
+            if (clas.getClassIdString().equals(ClassId)) {
+                return clas;
+            }
+        }
+        return null;
+    }
 
     public static void main(String[] args) {
-// Test Case 1:
-        String str1 = "Geeks@portal20";
-        System.out.println(isValidPassword(str1));
-
-        // Test Case 2:
-        String str2 = "Geeksforgeeks";
-        System.out.println(isValidPassword(str2));
-
-        // Test Case 3:
-        String str3 = "Geeks@ portal9";
-        System.out.println(isValidPassword(str3));
-
-        // Test Case 4:
-        String str4 = "1234";
-        System.out.println(isValidPassword(str4));
-
-        // Test Case 5:
-        String str5 = "Gfg@20";
-        System.out.println(isValidPassword(str5));
-
-        // Test Case 6:
-        String str6 = "geeks@portal20";
-        System.out.println(isValidPassword(str6));
+        System.out.println(getStringClass());
     }
 
 }

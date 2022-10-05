@@ -19,8 +19,7 @@ public class Server {
     public Server(int PORT) {
         try {
             server = new ServerSocket(PORT);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (IOException e) {
         }
     }
 
@@ -30,7 +29,7 @@ public class Server {
         System.out.println("Server đang lắng nghe...");
         try {
             while ((socket = server.accept()) != null) {
-                new ServerThread(socket, "Client" + i);
+                ServerThread serverThread = new ServerThread(socket, "Client" + i);
                 System.out.printf("Thread for Client # %d generating...%n", i++);
             }
         } catch (IOException e) {

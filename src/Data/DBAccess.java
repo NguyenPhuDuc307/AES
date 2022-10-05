@@ -1,6 +1,7 @@
 package Data;
 
 import Entity.Employee;
+import Entity.Class;
 import Entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -55,7 +56,7 @@ public class DBAccess {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
-    
+
     // Register
     public static String addEmployee(Employee employee) {
         String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, ?, true";
@@ -125,8 +126,8 @@ public class DBAccess {
         }
         return null;
     }
-    
-    // Update Employee
+
+    // Insert Employee
     public static String insertEmployee(Employee employee) {
         String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, ?, ?";
         try {
@@ -174,9 +175,70 @@ public class DBAccess {
         }
     }
 
+    // getAllClass
+    public static List<Class> getAllCLasses() {
+        List<Class> list = new ArrayList<>();
+        String query = "EXEC SP_GetClasses";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(new Class(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getBoolean(3)));
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
+    // Insert Class
+    public static String insertClass(Class classes) {
+        String query = "SP_AddClass ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, classes.getClassIdString());
+            preparedStatement.setString(2, classes.getClassName());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Thêm lớp học thành công!";
+            } else {
+                return "Thêm lớp học, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("Violation of PRIMARY KEY")) {
+                return "Lớp học đã tồn tại";
+            }
+            return er;
+        }
+    }
+
+    // Update Class
+    public static String updateClass(Class classes) {
+        String query = "EXEC SP_UpdateClass ?,?,?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, classes.getClassIdString());
+            preparedStatement.setString(2, classes.getClassName());
+            preparedStatement.setBoolean(3, classes.isEnable());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Cập nhật thông tin thành công!";
+            } else {
+                return "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
+
     public static void main(String[] args) {
-        Employee employee = new Employee("NV04", 1347, "Nguyễn Phú Đức", "phuduc@gmail.com", "0987654322", 1, "TPHCM",true);
-        System.out.println(insertEmployee(employee));
+        Class cl = new Class("19DTHE2", "Công nghệ");
+        System.out.println(insertClass(cl));
     }
 
 }

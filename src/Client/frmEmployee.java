@@ -78,6 +78,8 @@ public final class frmEmployee extends javax.swing.JFrame {
         btnEdit.setEnabled(false);
         btnDelete.setVisible(false);
         btnSave.setVisible(false);
+        btnHuy.setVisible(false);
+
         show_employee();
     }
 
@@ -158,11 +160,12 @@ public final class frmEmployee extends javax.swing.JFrame {
         lbTB = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         txtTrangthai = new javax.swing.JTextField();
+        btnHuy = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý nhân viên");
 
-        btnEdit.setBackground(new java.awt.Color(255, 204, 153));
+        btnEdit.setBackground(new java.awt.Color(255, 204, 102));
         btnEdit.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         btnEdit.setText("Sửa");
         btnEdit.addActionListener(new java.awt.event.ActionListener() {
@@ -171,7 +174,7 @@ public final class frmEmployee extends javax.swing.JFrame {
             }
         });
 
-        btnDelete.setBackground(new java.awt.Color(255, 204, 153));
+        btnDelete.setBackground(new java.awt.Color(255, 204, 102));
         btnDelete.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         btnDelete.setText("Đình chỉ");
         btnDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -180,7 +183,7 @@ public final class frmEmployee extends javax.swing.JFrame {
             }
         });
 
-        btnSave.setBackground(new java.awt.Color(255, 204, 153));
+        btnSave.setBackground(new java.awt.Color(255, 204, 102));
         btnSave.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         btnSave.setText("Lưu");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -288,6 +291,15 @@ public final class frmEmployee extends javax.swing.JFrame {
 
         txtTrangthai.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
+        btnHuy.setBackground(new java.awt.Color(255, 204, 102));
+        btnHuy.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        btnHuy.setText("Huỷ");
+        btnHuy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHuyActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnDelete, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSave, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -310,6 +322,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         jDesktopPane1.setLayer(lbTB, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(txtTrangthai, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnHuy, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -358,6 +371,8 @@ public final class frmEmployee extends javax.swing.JFrame {
                         .addComponent(btnDelete)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHuy)
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -371,7 +386,8 @@ public final class frmEmployee extends javax.swing.JFrame {
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnEdit)
                     .addComponent(btnDelete)
-                    .addComponent(btnSave))
+                    .addComponent(btnSave)
+                    .addComponent(btnHuy))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -523,6 +539,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         EnableTxt(true);
         btnDelete.setEnabled(true);
         btnSave.setVisible(true);
+        btnHuy.setVisible(true);
         btnEdit.setEnabled(false);
     }//GEN-LAST:event_btnEditActionPerformed
 
@@ -564,6 +581,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                 // lấy chuỗi string từ chuỗi byte
                 String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
+                socket.close();
                 show_employee();
 
                 JOptionPane.showMessageDialog(null, ketquaString);
@@ -571,6 +589,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                 EnableTxt(false);
                 btnDelete.setVisible(false);
                 btnSave.setVisible(false);
+                btnHuy.setVisible(false);
                 txtSDT.setText("");
                 txtAddess.setText("");
                 txtEmail.setText("");
@@ -580,18 +599,21 @@ public final class frmEmployee extends javax.swing.JFrame {
                 rNu.setSelected(false);
                 rKhac.setSelected(false);
 
-            } catch (IOException ex) {
-                Logger.getLogger(frmEmployee.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException e) {
+                try {
+                    if (socket != null) {
+                        socket.close();
+                    }
+                } catch (IOException ex) {
+                }
             }
         }
-
-
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         if (!txtId.getText().isEmpty()) {
-            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn đình chỉ?", "Xoá nhân viên",
+            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn?", "Thông báo",
                     JOptionPane.OK_CANCEL_OPTION);
 
             if (input == 0) {
@@ -638,6 +660,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                         EnableTxt(false);
                         btnDelete.setVisible(false);
                         btnSave.setVisible(false);
+                        btnHuy.setVisible(false);
                         txtSDT.setText("");
                         txtAddess.setText("");
                         txtEmail.setText("");
@@ -653,9 +676,23 @@ public final class frmEmployee extends javax.swing.JFrame {
                 }
             }
         }
-
-
     }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
+        // TODO add your handling code here:
+        EnableTxt(false);
+        btnDelete.setVisible(false);
+        btnSave.setVisible(false);
+        btnHuy.setVisible(false);
+        txtSDT.setText("");
+        txtAddess.setText("");
+        txtEmail.setText("");
+        txtId.setText("");
+        txtName.setText("");
+        rNam.setSelected(false);
+        rNu.setSelected(false);
+        rKhac.setSelected(false);
+    }//GEN-LAST:event_btnHuyActionPerformed
 
     /**
      * @param args the command line arguments
@@ -693,6 +730,7 @@ public final class frmEmployee extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnReload;
     private javax.swing.JButton btnSave;
     private javax.swing.JDesktopPane jDesktopPane1;

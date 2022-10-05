@@ -262,10 +262,7 @@ public class frmAddEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         rNam.setSelected(false);
         rKhac.setSelected(false);
-        if (rNu.isSelected()) {
-            Sex = 2;
-        } else
-            Sex = 0;
+        Sex = 2;
     }//GEN-LAST:event_rNuActionPerformed
 
     private void rKhacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rKhacActionPerformed
