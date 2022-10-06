@@ -13,14 +13,16 @@ public class Subject {
     private String SubjectId;
     private String SubjectName;
     private int CreditsNumber;
+    private boolean Enable;
 
     public Subject() {
     }
 
-    public Subject(String SubjectId, String SubjectName, int CreditsNumber) {
+    public Subject(String SubjectId, String SubjectName, int CreditsNumber, boolean Enable) {
         this.SubjectId = SubjectId;
         this.SubjectName = SubjectName;
         this.CreditsNumber = CreditsNumber;
+        this.Enable = Enable;
     }
 
     public String getSubjectId() {
@@ -47,8 +49,16 @@ public class Subject {
         this.CreditsNumber = CreditsNumber;
     }
 
+    public boolean isEnable() {
+        return Enable;
+    }
+
+    public void setEnable(boolean Enable) {
+        this.Enable = Enable;
+    }
+
     @Override
     public String toString() {
-        return "Subject{" + "SubjectId=" + SubjectId + ", SubjectName=" + SubjectName + ", CreditsNumber=" + CreditsNumber + '}';
+        return SubjectId + "\n" + SubjectName + "\n" + CreditsNumber + "\n" + Enable;
     }
 }

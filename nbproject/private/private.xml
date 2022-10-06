@@ -3,13 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Client/frmClass.java</file>
             <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Server/ServerThread.java</file>
+            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Entity/Subject.java</file>
             <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Client/frmEmployee.java</file>
+            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Client/frmStudent.java</file>
             <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Data/DBAccess.java</file>
-            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Entity/Class.java</file>
-            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Client/frmAddEmployee.java</file>
-            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/StringHandling/StringHandling.java</file>
+            <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Entity/Student.java</file>
             <file>file:/Users/nguyenphuduc/Desktop/LTM/AES/src/Client/frmRegister.java</file>
         </group>
     </open-files>

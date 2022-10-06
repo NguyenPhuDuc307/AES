@@ -33,8 +33,9 @@ public final class frmEmployee extends javax.swing.JFrame {
 
     private static int Sex = 0;
     private static int UserId = 0;
+    private static int ROLE = 0;
 
-    public static List<Employee> listEmployees = new ArrayList<Employee>();
+    public static List<Employee> listEmployees = new ArrayList<>();
 
     private void EnableTxt(boolean b) {
         txtAddess.setEnabled(b);
@@ -56,29 +57,28 @@ public final class frmEmployee extends javax.swing.JFrame {
     public frmEmployee() {
         initComponents();
 
+        EnableTxt(false);
+        btnEdit.setEnabled(false);
+        btnDelete.setVisible(false);
+        btnSave.setVisible(false);
+        btnHuy.setVisible(false);
         txtId.setEnabled(false);
         txtTrangthai.setEnabled(false);
 
-        tb_Employee.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái"}) {
+        tb_Employee.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái", "Quyền truy cập"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         });
 
-        tb_Employee.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 18));
+        tb_Employee.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 16));
         TableColumnModel column = tb_Employee.getColumnModel();
         column.getColumn(0).setPreferredWidth(10);
         column.getColumn(1).setPreferredWidth(50);
         column.getColumn(2).setPreferredWidth(150);
         column.getColumn(3).setPreferredWidth(40);
         column.getColumn(4).setPreferredWidth(30);
-
-        EnableTxt(false);
-        btnEdit.setEnabled(false);
-        btnDelete.setVisible(false);
-        btnSave.setVisible(false);
-        btnHuy.setVisible(false);
 
         show_employee();
     }
@@ -113,10 +113,12 @@ public final class frmEmployee extends javax.swing.JFrame {
             // lấy chuỗi string từ chuỗi byte
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
-            DefaultTableModel model = (DefaultTableModel) tb_Employee.getModel();
-            StringHandling.StringHandling.getDefaultTableModel_Employee(model, ketquaString);
+            if (!ketquaString.isEmpty()) {
+                DefaultTableModel model = (DefaultTableModel) tb_Employee.getModel();
+                StringHandling.StringHandling.getDefaultTableModel_Employee(model, ketquaString);
 
-            StringHandling.StringHandling.getList_Employee(listEmployees, ketquaString);
+                StringHandling.StringHandling.getList_Employee(listEmployees, ketquaString);
+            }
 
             socket.close();
         } catch (IOException e) {
@@ -200,7 +202,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái"
+
             }
         ));
         tb_Employee.setAlignmentY(0.9F);
@@ -214,7 +216,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Mã nhân viên");
+        jLabel1.setText("Mã nhân viên (đã mã hoá)");
 
         txtId.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
@@ -334,37 +336,38 @@ public final class frmEmployee extends javax.swing.JFrame {
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addGap(155, 155, 155)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)))
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSDT)
+                            .addComponent(txtAddess)
+                            .addComponent(txtName)
+                            .addComponent(txtEmail)
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addComponent(txtId, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTrangthai, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jLabel6))
-                                .addGap(8, 8, 8)
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtSDT)
-                                    .addComponent(txtAddess)
-                                    .addComponent(txtName)
-                                    .addComponent(txtEmail)
+                                    .addComponent(lbTB)
                                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                        .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel7)
+                                        .addComponent(rNam, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtTrangthai, javax.swing.GroupLayout.DEFAULT_SIZE, 164, Short.MAX_VALUE))
-                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lbTB)
-                                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                                .addComponent(rNam)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                                .addComponent(rNu)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(rKhac)))
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addGap(507, 507, 507))
+                                        .addComponent(rNu, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(rKhac)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(283, 283, 283))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(btnEdit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -514,6 +517,11 @@ public final class frmEmployee extends javax.swing.JFrame {
 
         UserId = employee.getUserId();
         Sex = employee.getSex();
+        if ((tb_Employee.getModel()).getValueAt(row, 7).toString().equals("Phòng công tác")) {
+            ROLE = 2;
+        } else {
+            ROLE = 1;
+        }
 
         switch (tb_Employee.getValueAt(row, 4).toString()) {
             case "Nam" -> {
@@ -521,7 +529,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                 rNu.setSelected(false);
                 rKhac.setSelected(false);
             }
-            case "Nu" -> {
+            case "Nữ" -> {
                 rNam.setSelected(false);
                 rNu.setSelected(true);
                 rKhac.setSelected(false);
@@ -559,7 +567,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
         if (!id.isEmpty()) {
             // nối thông tin gửi đi thành một chuỗi
-            String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai);
+            String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai, String.valueOf(ROLE));
 
             // chuyển thông tin về dạng byte
             byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -613,8 +621,7 @@ public final class frmEmployee extends javax.swing.JFrame {
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
         if (!txtId.getText().isEmpty()) {
-            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn?", "Thông báo",
-                    JOptionPane.OK_CANCEL_OPTION);
+            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn?", "Thông báo", JOptionPane.OK_CANCEL_OPTION);
 
             if (input == 0) {
                 String name = txtName.getText();
@@ -631,7 +638,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
                 if (!id.isEmpty()) {
                     // nối thông tin gửi đi thành một chuỗi
-                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai);
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateEmployee", id, String.valueOf(UserId), name, email, sdt, String.valueOf(Sex), diachi, trangThai, String.valueOf(ROLE));
 
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);

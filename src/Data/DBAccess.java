@@ -2,6 +2,8 @@ package Data;
 
 import Entity.Employee;
 import Entity.Class;
+import Entity.Student;
+import Entity.Subject;
 import Entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -59,20 +61,19 @@ public class DBAccess {
 
     // Register
     public static String addEmployee(Employee employee) {
-        String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, ?, true";
+        String query = "EXEC SP_CreateEmployee ?, ?, ?, ?, ?, ?, true";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, employee.getEmployeeId());
-            preparedStatement.setString(2, employee.getUserName());
-            preparedStatement.setString(3, employee.getFullName());
-            preparedStatement.setString(4, employee.getEmail());
-            preparedStatement.setString(5, employee.getPhoneNumber());
-            preparedStatement.setInt(6, employee.getSex());
-            preparedStatement.setString(7, employee.getAddress());
+            preparedStatement.setString(2, employee.getFullName());
+            preparedStatement.setString(3, employee.getEmail());
+            preparedStatement.setString(4, employee.getPhoneNumber());
+            preparedStatement.setInt(5, employee.getSex());
+            preparedStatement.setString(6, employee.getAddress());
 
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
-                return "Thêm mới nhân viên thành công! Mã nhân viên [" + employee.getEmployeeId() + "]";
+                return "Thêm mới nhân viên thành công! Mã nhân viên [" + AES.AES.decrypt(employee.getEmployeeId(), "AES") + "]";
             } else {
                 return "Thêm nhân viên thất bại thất bại, vui lòng kiểm tra lại thông tin!";
             }
@@ -97,7 +98,8 @@ public class DBAccess {
                         resultSet.getString(5),
                         resultSet.getInt(6),
                         resultSet.getString(7),
-                        resultSet.getBoolean(8)));
+                        resultSet.getBoolean(8),
+                        resultSet.getInt(9)));
             }
         } catch (SQLException e) {
         }
@@ -120,7 +122,8 @@ public class DBAccess {
                         resultSet.getString(5),
                         resultSet.getInt(6),
                         resultSet.getString(7),
-                        resultSet.getBoolean(8));
+                        resultSet.getBoolean(8),
+                        resultSet.getInt(9));
             }
         } catch (SQLException e) {
         }
@@ -153,7 +156,7 @@ public class DBAccess {
 
     // Update Employee
     public static String updateEmployee(Employee employee) {
-        String query = "EXEC SP_UpDateEmployee ?,?,?,?,?,?,?,? ";
+        String query = "EXEC SP_UpDateEmployee ?,?,?,?,?,?,?,?,? ";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, employee.getEmployeeId());
@@ -164,6 +167,7 @@ public class DBAccess {
             preparedStatement.setInt(6, employee.getSex());
             preparedStatement.setString(7, employee.getAddress());
             preparedStatement.setBoolean(8, employee.isEnable());
+            preparedStatement.setInt(9, employee.getRole());
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
                 return "Cập nhật thông tin thành công!";
@@ -193,6 +197,53 @@ public class DBAccess {
         return list;
     }
 
+    public static List<Subject> getAllSubjects() {
+        List<Subject> list = new ArrayList<>();
+        String query = "EXEC SP_GetSubject";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(new Subject(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getInt(3),
+                        resultSet.getBoolean(4)));
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
+    // getAllClassId
+    public static String getAllClassId() {
+        String string = "";
+        String query = "EXEC SP_GetClassId";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                string += "\n" + resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+        }
+        return string.substring(1);
+    }
+    
+    public static String getAllSubjectName() {
+        String string = "";
+        String query = "EXEC SP_GetSubjectName";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                string += "\n" + resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+        }
+        return string.substring(1);
+    }
+
     // Insert Class
     public static String insertClass(Class classes) {
         String query = "SP_AddClass ?, ?";
@@ -205,7 +256,7 @@ public class DBAccess {
             if (result != 0) {
                 return "Thêm lớp học thành công!";
             } else {
-                return "Thêm lớp học, vui lòng kiểm tra lại thông tin!";
+                return "Thêm lớp học thất bại, vui lòng kiểm tra lại thông tin!";
             }
         } catch (SQLException e) {
             String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
@@ -213,6 +264,50 @@ public class DBAccess {
                 return "Lớp học đã tồn tại";
             }
             return er;
+        }
+    }
+    
+    public static String insertSubject(Subject subject) {
+        String query = "SP_AddSubject ?, ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, subject.getSubjectId());
+            preparedStatement.setString(2, subject.getSubjectName());
+            preparedStatement.setInt(3, subject.getCreditsNumber());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Thêm môn học thành công!";
+            } else {
+                return "Thêm môn học thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("Violation of PRIMARY KEY")) {
+                return "Môn học đã tồn tại";
+            }
+            return er;
+        }
+    }
+    
+    public static String updateSubject(Subject subject) {
+        String query = "EXEC SP_UpDateSubject ?,?,?,?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, subject.getSubjectId());
+            preparedStatement.setString(2, subject.getSubjectName());
+            preparedStatement.setInt(3, subject.getCreditsNumber());            
+            preparedStatement.setBoolean(4, subject.isEnable());
+
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Cập nhật thông tin thành công!";
+            } else {
+                return "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
 
@@ -236,9 +331,89 @@ public class DBAccess {
         }
     }
 
-    public static void main(String[] args) {
-        Class cl = new Class("19DTHE2", "Công nghệ");
-        System.out.println(insertClass(cl));
+    // getAllClass
+    public static List<Student> getAllStudents() {
+        List<Student> list = new ArrayList<>();
+        String query = "EXEC SP_GetStudents";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(new Student(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getInt(6),
+                        resultSet.getString(7),
+                        resultSet.getBoolean(8)));
+            }
+        } catch (SQLException e) {
+        }
+        return list;
     }
 
+    // Insert Class
+    public static String insertStudent(Student student) {
+        String query = "EXEC SP_CreateStudent ?, ?, ?, ?, ?, ?, ?, true";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, student.getStudentId());
+            preparedStatement.setString(2, student.getClassId());
+            preparedStatement.setString(3, student.getFullName());
+            preparedStatement.setString(4, student.getEmail());
+            preparedStatement.setString(5, student.getPhoneNumber());
+            preparedStatement.setInt(6, student.getSex());
+            preparedStatement.setString(7, student.getAddress());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Thêm sinh viên thành công!";
+            } else {
+                return "Thêm sinh viên thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("Violation of PRIMARY KEY")) {
+                return "Sinh viên đã tồn tại";
+            }
+            if (er.contains("FOREIGN KEY")) {
+                return "Vui lòng chọn lại lớp học";
+            }
+            return er;
+        }
+    }
+
+    // Update Class
+    public static String updateStudent(Student student) {
+        String query = "EXEC SP_UpDateStudent ?, ?, ?, ?, ?, ?, ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, student.getStudentId());
+            preparedStatement.setString(2, student.getClassId());
+            preparedStatement.setString(3, student.getFullName());
+            preparedStatement.setString(4, student.getEmail());
+            preparedStatement.setString(5, student.getPhoneNumber());
+            preparedStatement.setInt(6, student.getSex());
+            preparedStatement.setString(7, student.getAddress());
+            preparedStatement.setBoolean(8, student.isEnable());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Cập nhật thông tin thành công!";
+            } else {
+                return "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
+
+    public static void main(String[] args) {
+        List<Employee> employees = getAllEmployees();
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+    }
 }

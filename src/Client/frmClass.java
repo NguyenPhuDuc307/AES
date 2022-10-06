@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumnModel;
@@ -33,7 +31,6 @@ public final class frmClass extends javax.swing.JFrame {
     private PrintWriter out = null;
     private Scanner in = null;
 
-    private String CLASSID;
     private boolean ENABLE;
     private int action = 0;
 
@@ -113,11 +110,12 @@ public final class frmClass extends javax.swing.JFrame {
             // lấy chuỗi string từ chuỗi byte
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
-            DefaultTableModel model = (DefaultTableModel) tb_Class.getModel();
-            StringHandling.StringHandling.getDefaultTableModel_Class(model, ketquaString);
+            if (!ketqua.isEmpty()) {
+                DefaultTableModel model = (DefaultTableModel) tb_Class.getModel();
+                StringHandling.StringHandling.getDefaultTableModel_Class(model, ketquaString);
 
-            StringHandling.StringHandling.getList_Class(listClass, ketquaString);
-
+                StringHandling.StringHandling.getList_Class(listClass, ketquaString);
+            }
             socket.close();
         } catch (IOException e) {
             try {
@@ -277,43 +275,39 @@ public final class frmClass extends javax.swing.JFrame {
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel1)
+                                .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2))
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbTB)
+                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                        .addComponent(r1)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(r2))))
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addComponent(btnThem)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(txtTen))
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHuy))))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbTB)
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(r1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(r2)))
+                                .addComponent(btnHuy)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -338,10 +332,10 @@ public final class frmClass extends javax.swing.JFrame {
                     .addComponent(r1)
                     .addComponent(r2)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addGap(8, 8, 8)
                 .addComponent(lbTB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -381,7 +375,6 @@ public final class frmClass extends javax.swing.JFrame {
 
         Entity.Class cl = StringHandling.StringHandling.getClass(listClass, ClassId);
 
-        CLASSID = cl.getClassIdString();
         ENABLE = cl.isEnable();
 
         switch (tb_Class.getValueAt(row, 2).toString()) {
@@ -462,7 +455,6 @@ public final class frmClass extends javax.swing.JFrame {
 
         txtMa.setEnabled(false);
 
-        ENABLE = true;
         action = 2;
     }//GEN-LAST:event_btnSuaActionPerformed
 
@@ -538,17 +530,16 @@ public final class frmClass extends javax.swing.JFrame {
             if (input == 0) {
                 String ClassId = txtMa.getText();
                 String ClassName = txtTen.getText();
-                boolean trangThai = ENABLE;
 
-                if (trangThai == true) {
-                    trangThai = false;
-                } else {
-                    trangThai = true;
+                if (ENABLE == true) {
+                    ENABLE = false;
+                } else if (ENABLE == false) {
+                    ENABLE = true;
                 }
 
                 if (!ClassId.isEmpty()) {
                     // nối thông tin gửi đi thành một chuỗi
-                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(trangThai));
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(ENABLE));
 
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);

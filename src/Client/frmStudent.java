@@ -4,6 +4,7 @@
  */
 package Client;
 
+import Entity.Student;
 import java.awt.Color;
 import java.awt.Font;
 import java.io.IOException;
@@ -14,17 +15,14 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author nguyenphuduc
  */
-public final class frmClass extends javax.swing.JFrame {
+public final class frmStudent extends javax.swing.JFrame {
 
     /**
      * Creates new form frmClass
@@ -33,26 +31,23 @@ public final class frmClass extends javax.swing.JFrame {
     private PrintWriter out = null;
     private Scanner in = null;
 
-    private String CLASSID;
+    private int SEX;
     private boolean ENABLE;
     private int action = 0;
 
-    public frmClass() {
+    public frmStudent() {
         initComponents();
 
-        txtMa.setEnabled(false);
+        txtId.setEnabled(false);
 
-        tb_Class.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã lớp học", "Tên lớp học", "Trạng thái"}) {
+        tb_Student.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã sinh viên", "Mã lớp học", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         });
 
-        tb_Class.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 18));
-        TableColumnModel column = tb_Class.getColumnModel();
-        column.getColumn(0).setPreferredWidth(10);
-        column.getColumn(1).setPreferredWidth(250);
+        tb_Student.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 16));
 
         EnableTxt(false);
         btnSua.setEnabled(false);
@@ -60,20 +55,24 @@ public final class frmClass extends javax.swing.JFrame {
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
 
-        r1.setEnabled(false);
-        r2.setEnabled(false);
+        rNam.setEnabled(false);
+        rNu.setEnabled(false);
+        rKhac.setEnabled(false);
 
         show_class();
     }
 
-    public static List<Entity.Class> listClass = new ArrayList<>();
+    public static List<Student> listStudents = new ArrayList<>();
 
     private void EnableTxt(boolean b) {
-        txtTen.setEnabled(b);
-        txtMa.setEnabled(b);
+        txtId.setEnabled(b);
+        txtName.setEnabled(b);
+        txtAddess.setEnabled(b);
+        txtEmail.setEnabled(b);
+        txtSDT.setEnabled(b);
+        txtTrangthai.setEnabled(b);
+        cbClass.setEnabled(b);
 
-//        r1.setEnabled(b);
-//        r2.setEnabled(b);
         if (!b) {
             lbTB.setText("Đã khoá chỉnh sửa");
             lbTB.setForeground(Color.RED);
@@ -91,7 +90,7 @@ public final class frmClass extends javax.swing.JFrame {
     public void show_class() {
 
         // nối thông tin gửi đi thành một chuỗi
-        String inputString = StringHandling.StringHandling.stringSoncatenation("getAllClass", "null");
+        String inputString = StringHandling.StringHandling.stringSoncatenation("getAllStudents", "null");
 
         // chuyển thông tin về dạng byte
         byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -113,10 +112,29 @@ public final class frmClass extends javax.swing.JFrame {
             // lấy chuỗi string từ chuỗi byte
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
-            DefaultTableModel model = (DefaultTableModel) tb_Class.getModel();
-            StringHandling.StringHandling.getDefaultTableModel_Class(model, ketquaString);
+            String arrString[] = ketquaString.split("\n\n");
 
-            StringHandling.StringHandling.getList_Class(listClass, ketquaString);
+            String Students = String.valueOf(arrString[0]);
+            String Classes = String.valueOf(arrString[1]);
+
+            String classString[] = Classes.split("\n");
+
+            int itemCount = cbClass.getItemCount();
+
+            for (int i = 0; i < itemCount; i++) {
+                cbClass.removeItemAt(0);
+            }
+
+            for (String classString1 : classString) {
+                cbClass.addItem(classString1);
+            }
+
+            if (!Students.isEmpty()) {
+                DefaultTableModel model = (DefaultTableModel) tb_Student.getModel();
+                StringHandling.StringHandling.getDefaultTableModel_Student(model, Students);
+
+                StringHandling.StringHandling.getList_Student(listStudents, Students);
+            }
 
             socket.close();
         } catch (IOException e) {
@@ -142,16 +160,27 @@ public final class frmClass extends javax.swing.JFrame {
         btnXoa = new javax.swing.JButton();
         btnLuu = new javax.swing.JButton();
         btnHuy = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        txtMa = new javax.swing.JTextField();
-        txtTen = new javax.swing.JTextField();
-        jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tb_Class = new javax.swing.JTable();
-        r1 = new javax.swing.JRadioButton();
-        r2 = new javax.swing.JRadioButton();
+        tb_Student = new javax.swing.JTable();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        rNam = new javax.swing.JRadioButton();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        txtId = new javax.swing.JTextField();
+        rNu = new javax.swing.JRadioButton();
+        jLabel2 = new javax.swing.JLabel();
+        rKhac = new javax.swing.JRadioButton();
+        txtName = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtSDT = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        txtAddess = new javax.swing.JTextField();
+        txtTrangthai = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         lbTB = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        cbClass = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý lớp học");
@@ -203,93 +232,170 @@ public final class frmClass extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Mã lớp");
-
-        txtMa.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-
-        txtTen.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-
-        jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Tên lớp");
-
-        tb_Class.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        tb_Class.setModel(new javax.swing.table.DefaultTableModel(
+        tb_Student.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        tb_Student.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã lớp học", "Tên lớp học", "Trạng thái"
+
             }
         ));
-        tb_Class.setRowHeight(30);
-        tb_Class.addMouseListener(new java.awt.event.MouseAdapter() {
+        tb_Student.setRowHeight(30);
+        tb_Student.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tb_ClassMouseClicked(evt);
+                tb_StudentMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tb_Class);
+        jScrollPane1.setViewportView(tb_Student);
 
-        r1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        r1.setForeground(new java.awt.Color(255, 255, 255));
-        r1.setText("Đang học");
-        r1.addActionListener(new java.awt.event.ActionListener() {
+        jLabel4.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Số điện thoại");
+
+        jLabel5.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel5.setText("Địa chỉ");
+
+        rNam.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        rNam.setForeground(new java.awt.Color(255, 255, 255));
+        rNam.setText("Nam");
+        rNam.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                r1ActionPerformed(evt);
+                rNamActionPerformed(evt);
             }
         });
 
-        r2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        r2.setForeground(new java.awt.Color(255, 255, 255));
-        r2.setText("Đã ngưng");
-        r2.addActionListener(new java.awt.event.ActionListener() {
+        jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Mã sinh viên");
+
+        jLabel6.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel6.setText("Giới tính");
+
+        txtId.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        rNu.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        rNu.setForeground(new java.awt.Color(255, 255, 255));
+        rNu.setText("Nữ");
+        rNu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                r2ActionPerformed(evt);
+                rNuActionPerformed(evt);
             }
         });
+
+        jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Họ tên");
+
+        rKhac.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        rKhac.setForeground(new java.awt.Color(255, 255, 255));
+        rKhac.setText("Khác");
+        rKhac.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rKhacActionPerformed(evt);
+            }
+        });
+
+        txtName.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        txtEmail.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        txtSDT.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        jLabel7.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel7.setText("Trạng thái");
+
+        txtAddess.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+
+        txtTrangthai.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Trạng thái");
+        jLabel3.setText("Email");
 
         lbTB.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 2, 14)); // NOI18N
-        lbTB.setForeground(new java.awt.Color(255, 51, 0));
+        lbTB.setForeground(new java.awt.Color(255, 0, 51));
         lbTB.setText("Đã khoá chỉnh sửa");
+
+        jLabel8.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel8.setText("Mã lớp học");
+
+        cbClass.setEditable(true);
+        cbClass.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jDesktopPane1.setLayer(btnThem, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSua, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnXoa, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnLuu, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnHuy, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(txtMa, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(txtTen, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jScrollPane1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(r1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDesktopPane1.setLayer(r2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(rNam, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtId, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(rNu, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(rKhac, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtEmail, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtSDT, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtAddess, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtTrangthai, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(lbTB, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(cbClass, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 782, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(8, 8, 8)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtSDT)
+                            .addComponent(txtAddess)
+                            .addComponent(txtName)
+                            .addComponent(txtEmail)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(17, 17, 17)
-                                .addComponent(jLabel1)
+                                .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel2))
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cbClass, 0, 294, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtTrangthai, javax.swing.GroupLayout.DEFAULT_SIZE, 286, Short.MAX_VALUE))
+                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lbTB)
+                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                        .addComponent(rNam)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(rNu)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(rKhac)))
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addComponent(btnThem)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -297,23 +403,10 @@ public final class frmClass extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addComponent(txtTen))
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHuy))))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lbTB)
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(r1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(r2)))
+                                .addComponent(btnHuy))
+                            .addComponent(jLabel1))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -327,21 +420,40 @@ public final class frmClass extends javax.swing.JFrame {
                     .addComponent(btnXoa)
                     .addComponent(btnLuu)
                     .addComponent(btnHuy))
-                .addGap(11, 11, 11)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
+                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel7)
+                    .addComponent(txtTrangthai, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8)
+                    .addComponent(cbClass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r1)
-                    .addComponent(r2)
+                    .addComponent(jLabel2)
+                    .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(rNam)
+                    .addComponent(rNu)
+                    .addComponent(rKhac))
+                .addGap(11, 11, 11)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSDT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
+                .addGap(5, 5, 5)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAddess, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lbTB)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 433, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 292, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -359,79 +471,83 @@ public final class frmClass extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tb_ClassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_ClassMouseClicked
+    private void tb_StudentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_StudentMouseClicked
         // TODO add your handling code here:
         btnSua.setEnabled(true);
         btnXoa.setEnabled(false);
         btnXoa.setVisible(true);
+        txtTrangthai.setEnabled(false);
 
         // lấy dòng dl hiện tại mình đang nhấn chuột
-        int row = this.tb_Class.getSelectedRow();
-        //lấy EmployeeID vừa nhận và ssu đó đổi sang string
-        String ClassId = (this.tb_Class.getModel()).getValueAt(row, 0).toString();
+        int row = this.tb_Student.getSelectedRow();
 
-        txtMa.setText(tb_Class.getValueAt(row, 0).toString());
-        txtTen.setText(tb_Class.getValueAt(row, 1).toString());
+        //lấy StudentId vừa nhận và ssu đó đổi sang string
 
-        if (tb_Class.getValueAt(row, 2).toString().equals("Đang học")) {
+        txtId.setText(tb_Student.getValueAt(row, 0).toString());
+        cbClass.setSelectedItem(tb_Student.getValueAt(row, 1).toString());
+        txtName.setText(tb_Student.getValueAt(row, 2).toString());
+        txtAddess.setText(tb_Student.getValueAt(row, 6).toString());
+        txtSDT.setText(tb_Student.getValueAt(row, 4).toString());
+        txtEmail.setText(tb_Student.getValueAt(row, 3).toString());
+        txtTrangthai.setText(tb_Student.getValueAt(row, 7).toString());
+
+        if (tb_Student.getValueAt(row, 7).toString().equals("Đang học")) {
             btnXoa.setText("Ngưng");
+            ENABLE = true;
         } else {
-            btnXoa.setText("Tiếp tục");
+            btnXoa.setText("Tiếp tục");            
+            ENABLE = false;
         }
 
-        Entity.Class cl = StringHandling.StringHandling.getClass(listClass, ClassId);
-
-        CLASSID = cl.getClassIdString();
-        ENABLE = cl.isEnable();
-
-        switch (tb_Class.getValueAt(row, 2).toString()) {
-            case "Đang học" -> {
-                r1.setSelected(true);
-                r2.setSelected(false);
+        switch (tb_Student.getValueAt(row, 5).toString()) {
+            case "Nam" -> {
+                rNam.setSelected(true);
+                rNu.setSelected(false);
+                rKhac.setSelected(false);
+                SEX = 1;
+            }
+            case "Nữ" -> {
+                rNam.setSelected(false);
+                rNu.setSelected(true);
+                rKhac.setSelected(false);
+                SEX = 2;
             }
             default -> {
-                r1.setSelected(false);
-                r2.setSelected(true);
+                rNam.setSelected(false);
+                rNu.setSelected(false);
+                rKhac.setSelected(true);
+                SEX = 0;
             }
         }
-    }//GEN-LAST:event_tb_ClassMouseClicked
+    }//GEN-LAST:event_tb_StudentMouseClicked
 
     private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
         // TODO add your handling code here:
         EnableTxt(true);
         btnLuu.setVisible(true);
         btnHuy.setVisible(true);
-        r1.setSelected(false);
-        r2.setSelected(false);
+        rNam.setSelected(false);
+        rNu.setSelected(false);
+        rKhac.setSelected(false);
+        rNam.setEnabled(true);
+        rNu.setEnabled(true);
+        rKhac.setEnabled(true);
+        txtTrangthai.setEnabled(false);
+
         btnSua.setEnabled(false);
 
-        txtMa.setText("");
-        txtTen.setText("");
+        txtId.setText("");
+        cbClass.setSelectedItem("Chọn lớp học");
+        txtAddess.setText("");
+        txtEmail.setText("");
+        txtSDT.setText("");
+        txtTrangthai.setText("");
+        txtName.setText("");
 
         action = 1;
 
-        ENABLE = true;
+        SEX = 0;
     }//GEN-LAST:event_btnThemActionPerformed
-
-    private void r1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r1ActionPerformed
-        // TODO add your handling code here:
-        r1.setSelected(true);
-        r2.setSelected(false);
-        if (r1.isSelected()) {
-            ENABLE = true;
-        } else
-            ENABLE = true;
-    }//GEN-LAST:event_r1ActionPerformed
-
-    private void r2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r2ActionPerformed
-        // TODO add your handling code here:
-        r1.setSelected(false);
-        r2.setSelected(true);
-        if (r2.isSelected()) {
-            ENABLE = false;
-        } else
-            ENABLE = true;
-    }//GEN-LAST:event_r2ActionPerformed
 
     private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
         // TODO add your handling code here:
@@ -441,45 +557,62 @@ public final class frmClass extends javax.swing.JFrame {
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
         btnSua.setEnabled(false);
-        txtMa.setText("");
-        txtTen.setText("");
-        r1.setSelected(false);
-        r2.setSelected(false);
-        r1.setEnabled(false);
-        r2.setEnabled(false);
+        txtId.setText("");
+        cbClass.setSelectedItem("");
+        txtAddess.setText("");
+        txtEmail.setText("");
+        txtSDT.setText("");
+        txtTrangthai.setText("");
+        txtName.setText("");
+        rNam.setSelected(false);
+        rNu.setSelected(false);
+        rKhac.setSelected(false);
+
+        rNam.setEnabled(false);
+        rNu.setEnabled(false);
+        rKhac.setEnabled(false);
+
     }//GEN-LAST:event_btnHuyActionPerformed
 
     private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
         // TODO add your handling code here:
         EnableTxt(true);
+        txtTrangthai.setEnabled(false);
+
         btnLuu.setVisible(true);
         btnThem.setEnabled(false);
         btnHuy.setVisible(true);
-        r1.setEnabled(true);
-        r2.setEnabled(true);
+        rNam.setEnabled(true);
+        rNu.setEnabled(true);
+        rKhac.setEnabled(true);
         btnSua.setEnabled(false);
         btnXoa.setEnabled(true);
 
-        txtMa.setEnabled(false);
+        txtId.setEnabled(false);
 
-        ENABLE = true;
         action = 2;
     }//GEN-LAST:event_btnSuaActionPerformed
 
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
-        String ClassId = txtMa.getText();
-        String ClassName = txtTen.getText();
+        String StudentId = txtId.getText();
+        String ClassId = cbClass.getSelectedItem().toString();
+        String Fullname = txtName.getText();
+        String Email = txtEmail.getText();
+        String Phonenum = txtSDT.getText();
+        int Sex = SEX;
+        String Address = txtAddess.getText();
+        boolean Enable = ENABLE;
 
-        if (!ClassId.isEmpty() && !ClassName.isEmpty()) {
+        if (!StudentId.isEmpty()) {
 
             // nối thông tin gửi đi thành một chuỗi
             String inputString = "";
             if (action == 1) {
-                inputString = StringHandling.StringHandling.stringSoncatenation("addClass", ClassId, ClassName);
+                inputString = StringHandling.StringHandling.stringSoncatenation("addStudent", StudentId, ClassId, Fullname, Email, Phonenum, String.valueOf(Sex), Address);
             }
             if (action == 2) {
-                inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(ENABLE));
+                inputString = StringHandling.StringHandling.stringSoncatenation("updateStudent", StudentId, ClassId, Fullname, Email, Phonenum, String.valueOf(Sex), Address, String.valueOf(Enable));
             }
 
             // chuyển thông tin về dạng byte
@@ -506,17 +639,29 @@ public final class frmClass extends javax.swing.JFrame {
                 show_class();
                 socket.close();
 
-                EnableTxt(false);
-                btnThem.setEnabled(true);
-                btnXoa.setVisible(false);
-                btnLuu.setVisible(false);
-                btnHuy.setVisible(false);
-                txtMa.setText("");
-                txtTen.setText("");
-                r1.setSelected(false);
-                r2.setSelected(false);
-                r1.setEnabled(false);
-                r2.setEnabled(false);
+                if (ketquaString.contains("thành công")) {
+                    EnableTxt(false);
+                    btnThem.setEnabled(true);
+                    btnXoa.setVisible(false);
+                    btnLuu.setVisible(false);
+                    btnHuy.setVisible(false);
+                    btnSua.setEnabled(false);
+                    txtId.setText("");
+                    cbClass.setSelectedItem("");
+                    txtAddess.setText("");
+                    txtEmail.setText("");
+                    txtSDT.setText("");
+                    txtTrangthai.setText("");
+                    txtName.setText("");
+                    rNam.setSelected(false);
+                    rNu.setSelected(false);
+                    rKhac.setSelected(false);
+
+                    rNam.setEnabled(false);
+                    rNu.setEnabled(false);
+                    rKhac.setEnabled(false);
+                }
+
             } catch (IOException e) {
                 try {
                     if (socket != null) {
@@ -531,24 +676,29 @@ public final class frmClass extends javax.swing.JFrame {
 
     private void btnXoaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnXoaActionPerformed
         // TODO add your handling code here:
-        if (!txtMa.getText().isEmpty()) {
+        if (!txtId.getText().isEmpty()) {
             int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn?", "Thông báo",
                     JOptionPane.OK_CANCEL_OPTION);
 
             if (input == 0) {
-                String ClassId = txtMa.getText();
-                String ClassName = txtTen.getText();
-                boolean trangThai = ENABLE;
+                String StudentId = txtId.getText();
+                String ClassId = cbClass.getSelectedItem().toString();
+                String Fullname = txtName.getText();
+                String Email = txtEmail.getText();
+                String Phonenum = txtSDT.getText();
+                int Sex = SEX;
+                String Address = txtAddess.getText();
+                boolean Enable = ENABLE;
 
-                if (trangThai == true) {
-                    trangThai = false;
-                } else {
-                    trangThai = true;
+                if (Enable == true) {
+                    Enable = false;
+                } else if (Enable == false) {
+                    Enable = true;
                 }
 
                 if (!ClassId.isEmpty()) {
                     // nối thông tin gửi đi thành một chuỗi
-                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(trangThai));
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateStudent", StudentId, ClassId, Fullname, Email, Phonenum, String.valueOf(Sex), Address, String.valueOf(Enable));
 
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -579,12 +729,21 @@ public final class frmClass extends javax.swing.JFrame {
                         btnXoa.setVisible(false);
                         btnLuu.setVisible(false);
                         btnHuy.setVisible(false);
-                        txtMa.setText("");
-                        txtTen.setText("");
-                        r1.setSelected(false);
-                        r2.setSelected(false);
-                        r1.setEnabled(false);
-                        r2.setEnabled(false);
+                        btnSua.setEnabled(false);
+                        txtId.setText("");
+                        cbClass.setSelectedItem("");
+                        txtAddess.setText("");
+                        txtEmail.setText("");
+                        txtSDT.setText("");
+                        txtTrangthai.setText("");
+                        txtName.setText("");
+                        rNam.setSelected(false);
+                        rNu.setSelected(false);
+                        rKhac.setSelected(false);
+
+                        rNam.setEnabled(false);
+                        rNu.setEnabled(false);
+                        rKhac.setEnabled(false);
                     } catch (IOException e) {
                         try {
                             if (socket != null) {
@@ -597,6 +756,36 @@ public final class frmClass extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void rNamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rNamActionPerformed
+        // TODO add your handling code here:
+        rNu.setSelected(false);
+        rKhac.setSelected(false);
+        if (rNam.isSelected()) {
+            SEX = 1;
+        } else
+            SEX = 0;
+    }//GEN-LAST:event_rNamActionPerformed
+
+    private void rNuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rNuActionPerformed
+        // TODO add your handling code here:
+        rNam.setSelected(false);
+        rKhac.setSelected(false);
+        if (rNu.isSelected()) {
+            SEX = 2;
+        } else
+            SEX = 0;
+    }//GEN-LAST:event_rNuActionPerformed
+
+    private void rKhacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rKhacActionPerformed
+        // TODO add your handling code here:
+        rNu.setSelected(false);
+        rNam.setSelected(false);
+        if (rNu.isSelected()) {
+            SEX = 3;
+        } else
+            SEX = 0;
+    }//GEN-LAST:event_rKhacActionPerformed
 
     /**
      * @param args the command line arguments
@@ -615,20 +804,21 @@ public final class frmClass extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmClass().setVisible(true);
+                new frmStudent().setVisible(true);
             }
         });
     }
@@ -639,16 +829,27 @@ public final class frmClass extends javax.swing.JFrame {
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
+    private javax.swing.JComboBox<String> cbClass;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTB;
-    private javax.swing.JRadioButton r1;
-    private javax.swing.JRadioButton r2;
-    private javax.swing.JTable tb_Class;
-    private javax.swing.JTextField txtMa;
-    private javax.swing.JTextField txtTen;
+    private javax.swing.JRadioButton rKhac;
+    private javax.swing.JRadioButton rNam;
+    private javax.swing.JRadioButton rNu;
+    private javax.swing.JTable tb_Student;
+    private javax.swing.JTextField txtAddess;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtId;
+    private javax.swing.JTextField txtName;
+    private javax.swing.JTextField txtSDT;
+    private javax.swing.JTextField txtTrangthai;
     // End of variables declaration//GEN-END:variables
 }

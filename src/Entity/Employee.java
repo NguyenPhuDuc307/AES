@@ -13,17 +13,18 @@ public class Employee {
     private String EmployeeId;
     private int UserId;
     private String UserName;
-    private String FullName ;
-    private String Email ;
-    private String PhoneNumber ;
-    private int Sex ;
-    private String Address ;
+    private String FullName;
+    private String Email;
+    private String PhoneNumber;
+    private int Sex;
+    private String Address;
     private boolean Enable;
+    private int Role;
 
     public Employee() {
     }
 
-    public Employee(String EmployeeId, int UserId, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
+    public Employee(String EmployeeId, int UserId, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable, int Role) {
         this.EmployeeId = EmployeeId;
         this.UserId = UserId;
         this.FullName = FullName;
@@ -32,17 +33,16 @@ public class Employee {
         this.Sex = Sex;
         this.Address = Address;
         this.Enable = Enable;
-    }
-    
-    public Employee(String EmployeeId, String UserName, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
+        this.Role = Role;
+    }    
+
+    public Employee(String EmployeeId, String FullName, String Email, String PhoneNumber, int Sex, String Address) {
         this.EmployeeId = EmployeeId;
-        this.UserName = UserName;
         this.FullName = FullName;
         this.Email = Email;
         this.PhoneNumber = PhoneNumber;
         this.Sex = Sex;
         this.Address = Address;
-        this.Enable = Enable;
     }
 
     public String getEmployeeId() {
@@ -52,7 +52,7 @@ public class Employee {
     public void setEmployeeId(String EmployeeId) {
         this.EmployeeId = EmployeeId;
     }
-    
+
     public int getUserId() {
         return UserId;
     }
@@ -117,8 +117,16 @@ public class Employee {
         this.Enable = Enable;
     }
 
+    public int getRole() {
+        return Role;
+    }
+
+    public void setRole(int Role) {
+        this.Role = Role;
+    }
+
     @Override
     public String toString() {
-        return EmployeeId + "\n" + UserId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address + "\n" + Enable;
+        return EmployeeId + "\n" + UserId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address + "\n" + Enable + "\n" + Role;
     }
 }

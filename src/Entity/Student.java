@@ -17,6 +17,7 @@ public class Student {
     private String PhoneNumber ;
     private int Sex ;
     private String Address ;
+    private boolean Enable;
 
     public Student() {
     }
@@ -30,6 +31,19 @@ public class Student {
         this.Sex = Sex;
         this.Address = Address;
     }
+
+    public Student(String StudentId, String ClassId, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
+        this.StudentId = StudentId;
+        this.ClassId = ClassId;
+        this.FullName = FullName;
+        this.Email = Email;
+        this.PhoneNumber = PhoneNumber;
+        this.Sex = Sex;
+        this.Address = Address;
+        this.Enable = Enable;
+    }
+    
+    
 
     public String getStudentId() {
         return StudentId;
@@ -87,8 +101,16 @@ public class Student {
         this.Address = Address;
     }
 
+    public boolean isEnable() {
+        return Enable;
+    }
+
+    public void setEnable(boolean Enable) {
+        this.Enable = Enable;
+    }
+
     @Override
     public String toString() {
-        return "Student{" + "StudentId=" + StudentId + ", ClassId=" + ClassId + ", FullName=" + FullName + ", Email=" + Email + ", PhoneNumber=" + PhoneNumber + ", Sex=" + Sex + ", Address=" + Address + '}';
+        return StudentId + "\n" + ClassId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address + "\n" + Enable;
     }
 }

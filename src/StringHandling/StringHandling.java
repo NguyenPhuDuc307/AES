@@ -7,6 +7,7 @@ package StringHandling;
 import Data.DBAccess;
 import Entity.Employee;
 import Entity.Class;
+import Entity.Student;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -83,24 +84,39 @@ public class StringHandling {
     public static String getStringEmployee() {
         String string = "";
         List<Employee> listEmployees = DBAccess.getAllEmployees();
-
-        for (Employee employee : listEmployees) {
-            string += employee + "\n";
+        if (!listEmployees.isEmpty()) {
+            for (Employee employee : listEmployees) {
+                string += employee + "\n";
+            }
+            return string.substring(0, string.length() - 1);
         }
-
-        return string.substring(0, string.length() - 1);
+        return string;
     }
-    
-    //chuyển list Employee thành chuỗi
+
+    //chuyển list Class thành chuỗi
     public static String getStringClass() {
         String string = "";
         List<Class> listClasses = DBAccess.getAllCLasses();
-
-        for (Class cl : listClasses) {
-            string += cl + "\n";
+        if (!listClasses.isEmpty()) {
+            for (Class cl : listClasses) {
+                string += cl + "\n";
+            }
+            return string.substring(0, string.length() - 1);
         }
-        
-        return string.substring(0, string.length() - 1);
+        return string;
+    }
+
+    //chuyển list Student thành chuỗi
+    public static String getStringStudent() {
+        String string = "";
+        List<Student> listStudents = DBAccess.getAllStudents();
+        if (!listStudents.isEmpty()) {
+            for (Student student : listStudents) {
+                string += student + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
     }
 
     // chuyển chuỗi thành model
@@ -110,7 +126,7 @@ public class StringHandling {
             model.removeRow(0);
         }
 
-        int COLUMN = 8;
+        int COLUMN = 9;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
@@ -163,6 +179,84 @@ public class StringHandling {
                             row[6] = "Nghỉ việc";
                         }
                         break;
+                    case 8:
+                        if (String.valueOf(arrString[j]).equals("1")) {
+                            row[7] = "Quản trị viên";
+                        } else {
+                            row[7] = "Phòng công tác";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            model.addRow(row);
+        }
+    }
+
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Student(DefaultTableModel model, String string) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 8;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Object[] row = new Object[COLUMN];
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        row[0] = String.valueOf(arrString[j]);
+                        break;
+                    case 1:
+                        row[1] = String.valueOf(arrString[j]);
+                        break;
+                    case 2:
+                        row[2] = String.valueOf(arrString[j]);
+                        break;
+                    case 3:
+                        row[3] = String.valueOf(arrString[j]);
+                        break;
+                    case 4:
+                        row[4] = String.valueOf(arrString[j]);
+                        break;
+                    case 5:
+                        if (null == String.valueOf(arrString[j])) {
+                            row[5] = "Khác";
+                        } else {
+                            switch (String.valueOf(arrString[j])) {
+                                case "1":
+                                    row[5] = "Nam";
+                                    break;
+                                case "2":
+                                    row[5] = "Nữ";
+                                    break;
+                                default:
+                                    row[5] = "Khác";
+                                    break;
+                            }
+                        }
+                        break;
+                    case 6:
+                        row[6] = String.valueOf(arrString[j]);
+                        break;
+                    case 7:
+                        if (String.valueOf(arrString[j]).equals("true")) {
+                            row[7] = "Đang học";
+                        } else {
+                            row[7] = "Nghỉ học";
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -178,7 +272,7 @@ public class StringHandling {
 
         list.removeAll(list);
 
-        int COLUMN = 8;
+        int COLUMN = 9;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
@@ -200,10 +294,10 @@ public class StringHandling {
                         employee.setFullName(String.valueOf(arrString[j]));
                         break;
                     case 3:
-                        employee.setPhoneNumber(String.valueOf(arrString[j]));
+                        employee.setEmail(String.valueOf(arrString[j]));
                         break;
                     case 4:
-                        employee.setEmail(String.valueOf(arrString[j]));
+                        employee.setPhoneNumber(String.valueOf(arrString[j]));
                         break;
                     case 5:
                         employee.setSex(Integer.parseInt(arrString[j]));
@@ -212,7 +306,10 @@ public class StringHandling {
                         employee.setAddress(String.valueOf(arrString[j]));
                         break;
                     case 7:
-                        employee.setAddress(String.valueOf(arrString[j]));
+                        employee.setEnable(Boolean.parseBoolean(arrString[j]));
+                        break;
+                    case 8:
+                        employee.setRole(Integer.parseInt(arrString[j]));
                         break;
                     default:
                         break;
@@ -258,7 +355,7 @@ public class StringHandling {
             list.add(cl);
         }
     }
-    
+
     // chuyển chuỗi thành model
     public static void getDefaultTableModel_Class(DefaultTableModel model, String string) {
 
@@ -300,8 +397,58 @@ public class StringHandling {
             model.addRow(row);
         }
     }
-    
-    
+
+    // chuyển chuỗi thành model
+    public static void getList_Student(List<Student> list, String string) {
+
+        list.removeAll(list);
+
+        int COLUMN = 8;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Student student = new Student();
+
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        student.setStudentId(String.valueOf(arrString[j]));
+                        break;
+                    case 1:
+                        student.setClassId(String.valueOf(arrString[j]));
+                    case 2:
+                        student.setFullName(String.valueOf(arrString[j]));
+                        break;
+                    case 3:
+                        student.setPhoneNumber(String.valueOf(arrString[j]));
+                        break;
+                    case 4:
+                        student.setEmail(String.valueOf(arrString[j]));
+                        break;
+                    case 5:
+                        student.setSex(Integer.parseInt(arrString[j]));
+                        break;
+                    case 6:
+                        student.setAddress(String.valueOf(arrString[j]));
+                        break;
+                    case 7:
+                        student.setAddress(String.valueOf(arrString[j]));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            list.add(student);
+        }
+    }
+
     // check passwork
     public static boolean isValidPassword(String password) {
 
@@ -314,19 +461,12 @@ public class StringHandling {
         // Compile the ReGex
         Pattern p = Pattern.compile(regex);
 
-        // If the password is empty
-        // return false
         if (password == null) {
             return false;
         }
 
-        // Pattern class contains matcher() method
-        // to find matching between given password
-        // and regular expression.
         Matcher m = p.matcher(password);
 
-        // Return if the password
-        // matched the ReGex
         return m.matches();
     }
 
@@ -338,11 +478,20 @@ public class StringHandling {
         }
         return null;
     }
-    
+
     public static Class getClass(List<Class> listClass, String ClassId) {
         for (Class clas : listClass) {
             if (clas.getClassIdString().equals(ClassId)) {
                 return clas;
+            }
+        }
+        return null;
+    }
+
+    public static Student getStudent(List<Student> listStudent, String StudentId) {
+        for (Student student : listStudent) {
+            if (student.getStudentId().equals(StudentId)) {
+                return student;
             }
         }
         return null;
