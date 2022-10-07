@@ -8,6 +8,7 @@ import Data.DBAccess;
 import Entity.Employee;
 import Entity.Class;
 import Entity.Student;
+import Entity.Subject;
 import Entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -54,21 +55,22 @@ public class ServerThread implements Runnable {
                     String[] arrLogin = string.split("\n");// ngắt chuỗi string
                     String username = String.valueOf(arrLogin[0].toCharArray());// username
                     String pass = String.valueOf(arrLogin[1].toCharArray());// pass
-                    String passEncrypt = AES.AES.encrypt(pass, "AES");
-                    User user = new User(username, passEncrypt);// Create user
+                    String usernameEncrypt = AES.AES.encrypt(username);
+                    String passEncrypt = AES.AES.encrypt(pass);
+                    User user = new User(usernameEncrypt, passEncrypt);// Create user
                     String result = DBAccess.Login(user);
                     out.println(result);
                 }
                 case "register" -> {
                     String[] arrRegister = string.split("\n");// ngắt chuỗi string
                     String username = String.valueOf(arrRegister[0].toCharArray());// username
-                    String usernameEncrypt = AES.AES.encrypt(username, "AES");
+                    String usernameEncrypt = AES.AES.encrypt(username);
                     String pass = String.valueOf(arrRegister[1].toCharArray());// pass
-                    String passEncrypt = AES.AES.encrypt(pass, "AES");
+                    String passEncrypt = AES.AES.encrypt(pass);
                     int role = Integer.parseInt(String.valueOf(arrRegister[2].toCharArray()));// role
                     User user = new User(usernameEncrypt, passEncrypt, role);// Create user
                     String EmployID = String.valueOf(arrRegister[3]);
-                    String EmployIDEncrypt = AES.AES.encrypt(EmployID, "AES");
+                    String EmployIDEncrypt = AES.AES.encrypt(EmployID);
                     String Name = String.valueOf(arrRegister[4]);
                     int Sex = Integer.parseInt(String.valueOf(arrRegister[5]));
                     String Email = String.valueOf(arrRegister[6]);
@@ -89,6 +91,15 @@ public class ServerThread implements Runnable {
                 case "getAllEmployee" -> {
                     // lấy ra list Employee dạng chuỗi
                     String resultString = StringHandling.StringHandling.getStringEmployee();
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "getAllSubjects" -> {
+                    // lấy ra list Subject dạng chuỗi
+                    String resultString = StringHandling.StringHandling.getStringSubject();
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
                     String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
@@ -156,6 +167,62 @@ public class ServerThread implements Runnable {
                     String arr[] = string.split("\n");
                     Class cl = new Class(arr[0], arr[1], Boolean.parseBoolean(arr[2]));
                     String resultString = DBAccess.updateClass(cl);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "addSubject" -> {
+                    String arr[] = string.split("\n");
+                    Subject subject = new Subject(arr[0], arr[1], Integer.parseInt(arr[2]));
+                    String resultString = DBAccess.insertSubject(subject);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "updateSubject" -> {
+                    String arr[] = string.split("\n");
+                    Subject subject = new Subject(arr[0], arr[1], Integer.parseInt(arr[2]),Boolean.parseBoolean(arr[3]));
+                    String resultString = DBAccess.updateSubject(subject);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "deleteSubject" -> {
+                    String arr[] = string.split("\n");
+                    String resultString = DBAccess.deleteSubject(arr[0]);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "deleteEmployee" -> {
+                    String arr[] = string.split("\n");
+                    String resultString = DBAccess.deleteEmployee(arr[0]);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "deleteStudent" -> {
+                    String arr[] = string.split("\n");
+                    String resultString = DBAccess.deleteStudent(arr[0]);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "deleteClass" -> {
+                    String arr[] = string.split("\n");
+                    String resultString = DBAccess.deleteClass(arr[0]);
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
                     String inputBase64 = Base64.getEncoder().encodeToString(inputByte);

@@ -46,7 +46,7 @@ public final class frmClass extends javax.swing.JFrame {
             }
         });
 
-        tb_Class.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 18));
+        tb_Class.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 16));
         TableColumnModel column = tb_Class.getColumnModel();
         column.getColumn(0).setPreferredWidth(10);
         column.getColumn(1).setPreferredWidth(250);
@@ -56,6 +56,7 @@ public final class frmClass extends javax.swing.JFrame {
         btnXoa.setVisible(false);
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
+        btnRemove.setVisible(false);
 
         r1.setEnabled(false);
         r2.setEnabled(false);
@@ -150,6 +151,9 @@ public final class frmClass extends javax.swing.JFrame {
         r2 = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         lbTB = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý lớp học");
@@ -219,7 +223,7 @@ public final class frmClass extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Mã lớp học", "Tên lớp học", "Trạng thái"
+
             }
         ));
         tb_Class.setRowHeight(30);
@@ -256,6 +260,29 @@ public final class frmClass extends javax.swing.JFrame {
         lbTB.setForeground(new java.awt.Color(255, 51, 0));
         lbTB.setText("Đã khoá chỉnh sửa");
 
+        jLabel8.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 204, 102));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("QUẢN LÝ NHÂN VIÊN");
+
+        btnDelete.setBackground(new java.awt.Color(255, 204, 102));
+        btnDelete.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        btnDelete.setText("Xoá");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
+        btnRemove.setBackground(new java.awt.Color(255, 204, 102));
+        btnRemove.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        btnRemove.setText("Xoá");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnThem, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSua, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnXoa, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -270,46 +297,56 @@ public final class frmClass extends javax.swing.JFrame {
         jDesktopPane1.setLayer(r2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(lbTB, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnDelete, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnRemove, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(btnThem)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnHuy)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbTB)
-                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                        .addComponent(r1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(r2))))
+                                .addComponent(r1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(r2))
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(btnThem)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHuy)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addGap(24, 24, 24)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtMa)
+                                    .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)))
+                            .addComponent(lbTB))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 673, Short.MAX_VALUE))
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(477, 477, 477)
+                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(477, Short.MAX_VALUE)))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,29 +357,41 @@ public final class frmClass extends javax.swing.JFrame {
                     .addComponent(btnSua)
                     .addComponent(btnXoa)
                     .addComponent(btnLuu)
-                    .addComponent(btnHuy))
-                .addGap(11, 11, 11)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r1)
-                    .addComponent(r2)
-                    .addComponent(jLabel3))
-                .addGap(8, 8, 8)
-                .addComponent(lbTB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
+                    .addComponent(btnHuy)
+                    .addComponent(btnRemove))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 525, Short.MAX_VALUE)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(r1)
+                            .addComponent(r2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbTB)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                    .addGap(271, 271, 271)
+                    .addComponent(btnDelete)
+                    .addContainerGap(272, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jDesktopPane1)
+            .addComponent(jDesktopPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -358,6 +407,8 @@ public final class frmClass extends javax.swing.JFrame {
         btnSua.setEnabled(true);
         btnXoa.setEnabled(false);
         btnXoa.setVisible(true);
+        btnRemove.setEnabled(false);
+        btnRemove.setVisible(true);
 
         // lấy dòng dl hiện tại mình đang nhấn chuột
         int row = this.tb_Class.getSelectedRow();
@@ -434,6 +485,7 @@ public final class frmClass extends javax.swing.JFrame {
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
         btnSua.setEnabled(false);
+        btnRemove.setVisible(false);
         txtMa.setText("");
         txtTen.setText("");
         r1.setSelected(false);
@@ -448,6 +500,7 @@ public final class frmClass extends javax.swing.JFrame {
         btnLuu.setVisible(true);
         btnThem.setEnabled(false);
         btnHuy.setVisible(true);
+        btnRemove.setEnabled(true);
         r1.setEnabled(true);
         r2.setEnabled(true);
         btnSua.setEnabled(false);
@@ -503,6 +556,7 @@ public final class frmClass extends javax.swing.JFrame {
                 btnXoa.setVisible(false);
                 btnLuu.setVisible(false);
                 btnHuy.setVisible(false);
+                btnRemove.setVisible(false);
                 txtMa.setText("");
                 txtTen.setText("");
                 r1.setSelected(false);
@@ -589,6 +643,72 @@ public final class frmClass extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnXoaActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        if (!txtMa.getText().isEmpty()) {
+            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xoá?", "Thông báo", JOptionPane.OK_CANCEL_OPTION);
+
+            if (input == 0) {
+                String ClassId = txtMa.getText();
+
+                if (!ClassId.isEmpty()) {
+                    // nối thông tin gửi đi thành một chuỗi
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("deleteClass", ClassId);
+
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+
+                    // kết quả trả về tại đây
+                    String ketqua = "";
+
+                    try {
+                        // Socket nhận tham tham số là địa chỉ IP và Host
+                        socket = new Socket("127.0.0.1", 8888);
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        in = new Scanner(socket.getInputStream());
+                        out.println(inputBase64);
+
+                        // lấy ra kết quả
+                        ketqua = String.valueOf(in.nextLine());
+                        // lấy chuỗi string từ chuỗi byte
+                        String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+                        // nếu đăng nhập thành công
+                        
+                        JOptionPane.showMessageDialog(null, ketquaString);
+
+                        show_class();
+                        socket.close();
+
+                        EnableTxt(false);
+                        btnThem.setEnabled(true);
+                        btnXoa.setVisible(false);
+                        btnLuu.setVisible(false);
+                        btnHuy.setVisible(false);
+                        btnRemove.setVisible(false);
+                        txtMa.setText("");
+                        txtTen.setText("");
+                        r1.setSelected(false);
+                        r2.setSelected(false);
+                        r1.setEnabled(false);
+                        r2.setEnabled(false);
+                    } catch (IOException e) {
+                        try {
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        } catch (IOException ex) {
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -625,8 +745,10 @@ public final class frmClass extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnLuu;
+    private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSua;
     private javax.swing.JButton btnThem;
     private javax.swing.JButton btnXoa;
@@ -634,6 +756,7 @@ public final class frmClass extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTB;
     private javax.swing.JRadioButton r1;

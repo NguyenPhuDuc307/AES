@@ -1,15 +1,43 @@
 package AES;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.InvalidKeyException;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Base64;
+import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 
 public class AES {
 
-    public static String encrypt(String string, String KEY) {
+    private static String getKEY(String FileURL){
+        String KEY = null;
         try {
+            StringBuffer sb;
+            try (FileReader fr = new FileReader(new File(FileURL))) {
+                sb = new StringBuffer();
+                char ca[] = new char[5] ;
+                while (fr.ready()) {
+                    int len = fr.read(ca);
+                    sb.append(ca,0,len) ;
+                }
+            }
+            KEY = sb.toString();
+        } catch (IOException e) {
+        }
+        return KEY;
+    }
+    
+    public static String encrypt(String string) {
+        try {
+            String KEY = getKEY("KEY.txt");
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
             byte[] key = KEY.getBytes("UTF-8");
             key = sha.digest(key);
@@ -24,14 +52,15 @@ public class AES {
             String encrypted = Base64.getEncoder().encodeToString(byteEncrypted);
 
             return encrypted;
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             System.out.println(e.toString());
         }
         return null;
     }
 
-    public static String decrypt(String string, String KEY) {
+    public static String decrypt(String string) {
         try {
+            String KEY = getKEY("KEY.txt");
             MessageDigest sha = MessageDigest.getInstance("SHA-1");
             byte[] key = KEY.getBytes("UTF-8");
             key = sha.digest(key);
@@ -45,7 +74,7 @@ public class AES {
             byte[] byteDecrypted = cipher.doFinal(Base64.getDecoder().decode(string));
             String decrypted = new String(byteDecrypted);
             return decrypted;
-        } catch (Exception e) {
+        } catch (UnsupportedEncodingException | InvalidKeyException | NoSuchAlgorithmException | BadPaddingException | IllegalBlockSizeException | NoSuchPaddingException e) {
             System.out.println(e.toString());
         }
         return null;
@@ -68,12 +97,10 @@ public class AES {
                 + "    byte uncompressed[] = byteout.toByteArray();\n"
                 + "    return (uncompressed.toString());\n"
                 + "}";
-        String KEY = "AVC";
         AES aes = new AES();
-        String enString = aes.encrypt(string, KEY);
-        String deString = aes.decrypt(enString, KEY);
+        String enString = aes.encrypt(string);
+        String deString = aes.decrypt("dMIbvRe6rWhgWMexX8nbcQ==");
         System.out.println(enString);
         System.out.println(deString);
-
     }
 }

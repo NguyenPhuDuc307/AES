@@ -8,6 +8,7 @@ import Data.DBAccess;
 import Entity.Employee;
 import Entity.Class;
 import Entity.Student;
+import Entity.Subject;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.List;
@@ -100,6 +101,19 @@ public class StringHandling {
         if (!listClasses.isEmpty()) {
             for (Class cl : listClasses) {
                 string += cl + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
+    }
+
+    //chuyển list Subject thành chuỗi
+    public static String getStringSubject() {
+        String string = "";
+        List<Subject> listSubjects = DBAccess.getAllSubjects();
+        if (!listSubjects.isEmpty()) {
+            for (Subject subject : listSubjects) {
+                string += subject + "\n";
             }
             return string.substring(0, string.length() - 1);
         }
@@ -285,34 +299,17 @@ public class StringHandling {
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0:
-                        employee.setEmployeeId(String.valueOf(arrString[j]));
-                        break;
-                    case 1:
-                        employee.setUserId(Integer.parseInt(arrString[j]));
-                    case 2:
-                        employee.setFullName(String.valueOf(arrString[j]));
-                        break;
-                    case 3:
-                        employee.setEmail(String.valueOf(arrString[j]));
-                        break;
-                    case 4:
-                        employee.setPhoneNumber(String.valueOf(arrString[j]));
-                        break;
-                    case 5:
-                        employee.setSex(Integer.parseInt(arrString[j]));
-                        break;
-                    case 6:
-                        employee.setAddress(String.valueOf(arrString[j]));
-                        break;
-                    case 7:
-                        employee.setEnable(Boolean.parseBoolean(arrString[j]));
-                        break;
-                    case 8:
-                        employee.setRole(Integer.parseInt(arrString[j]));
-                        break;
-                    default:
-                        break;
+                    case 0 -> employee.setEmployeeId(String.valueOf(arrString[j]));
+                    case 1 -> employee.setUserId(Integer.parseInt(arrString[j]));
+                    case 2 -> employee.setFullName(String.valueOf(arrString[j]));
+                    case 3 -> employee.setEmail(String.valueOf(arrString[j]));
+                    case 4 -> employee.setPhoneNumber(String.valueOf(arrString[j]));
+                    case 5 -> employee.setSex(Integer.parseInt(arrString[j]));
+                    case 6 -> employee.setAddress(String.valueOf(arrString[j]));
+                    case 7 -> employee.setEnable(Boolean.parseBoolean(arrString[j]));
+                    case 8 -> employee.setRole(Integer.parseInt(arrString[j]));
+                    default -> {
+                    }
                 }
 
             }
@@ -339,20 +336,46 @@ public class StringHandling {
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0:
-                        cl.setClassIdString(String.valueOf(arrString[j]));
-                        break;
-                    case 1:
-                        cl.setClassName(String.valueOf(arrString[j]));
-                    case 2:
-                        cl.setEnable(Boolean.parseBoolean(arrString[j]));
-                        break;
-                    default:
-                        break;
+                    case 0 -> cl.setClassIdString(String.valueOf(arrString[j]));
+                    case 1 -> cl.setClassName(String.valueOf(arrString[j]));
+                    case 2 -> cl.setEnable(Boolean.parseBoolean(arrString[j]));
+                    default -> {
+                    }
                 }
             }
             // lưu vào danh sách
             list.add(cl);
+        }
+    }
+
+    // chuyển chuỗi thành model
+    public static void getList_Subject(List<Subject> list, String string) {
+
+        list.removeAll(list);
+
+        int COLUMN = 4;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Subject subject = new Subject();
+
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0 -> subject.setSubjectId(String.valueOf(arrString[j]));
+                    case 1 -> subject.setSubjectName(String.valueOf(arrString[j]));
+                    case 2 -> subject.setCreditsNumber(Integer.parseInt(arrString[j]));
+                    case 3 -> subject.setEnable(Boolean.parseBoolean(arrString[j]));
+                    default -> {
+                    }
+                }
+            }
+            // lưu vào danh sách
+            list.add(subject);
         }
     }
 
@@ -386,6 +409,51 @@ public class StringHandling {
                             row[2] = "Đang học";
                         } else {
                             row[2] = "Đã ngưng";
+                        }
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            model.addRow(row);
+        }
+    }
+
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Subject(DefaultTableModel model, String string) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 4;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Object[] row = new Object[COLUMN];
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        row[0] = String.valueOf(arrString[j]);
+                        break;
+                    case 1:
+                        row[1] = String.valueOf(arrString[j]);
+                        break;
+                    case 2:
+                        row[2] = String.valueOf(arrString[j]);
+                        break;
+                    case 3:
+                        if (String.valueOf(arrString[j]).equals("true")) {
+                            row[3] = "Đang học";
+                        } else {
+                            row[3] = "Đã ngưng";
                         }
                         break;
                     default:
@@ -483,6 +551,15 @@ public class StringHandling {
         for (Class clas : listClass) {
             if (clas.getClassIdString().equals(ClassId)) {
                 return clas;
+            }
+        }
+        return null;
+    }
+
+    public static Subject getSubject(List<Subject> listSubject, String SubjectId) {
+        for (Subject subject : listSubject) {
+            if (subject.getSubjectId().equals(SubjectId)) {
+                return subject;
             }
         }
         return null;

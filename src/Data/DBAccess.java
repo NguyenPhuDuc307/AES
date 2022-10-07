@@ -73,7 +73,7 @@ public class DBAccess {
 
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
-                return "Thêm mới nhân viên thành công! Mã nhân viên [" + AES.AES.decrypt(employee.getEmployeeId(), "AES") + "]";
+                return "Thêm mới nhân viên thành công! Mã nhân viên [" + AES.AES.decrypt(employee.getEmployeeId()) + "]";
             } else {
                 return "Thêm nhân viên thất bại thất bại, vui lòng kiểm tra lại thông tin!";
             }
@@ -199,7 +199,7 @@ public class DBAccess {
 
     public static List<Subject> getAllSubjects() {
         List<Subject> list = new ArrayList<>();
-        String query = "EXEC SP_GetSubject";
+        String query = "EXEC SP_GetSubjects";
         try {
             preparedStatement = connection.prepareStatement(query);
             resultSet = preparedStatement.executeQuery();
@@ -308,6 +308,90 @@ public class DBAccess {
             }
         } catch (SQLException e) {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
+    
+    public static String deleteSubject(String SubjectId) {
+        String query = "EXEC SP_DeleteSubject ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, SubjectId);
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Xoá môn học thành công!";
+            } else {
+                return "Xoá môn học thất bại, vui lòng kiểm tra lại!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("REFERENCE constraint")) {
+                return "Không thể xoá môn học vì đang được sử dụng, bạn chỉ có thể ngưng môn học này";
+            }
+            return er;
+        }
+    }
+    
+    public static String deleteEmployee(String EmployeeId) {
+        String query = "EXEC SP_DeleteEmployee ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, EmployeeId);
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Xoá nhân viên thành công!";
+            } else {
+                return "Xoá nhân viên thất bại, vui lòng kiểm tra lại!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("REFERENCE constraint")) {
+                return "Không thể xoá nhân viên vì đang được sử dụng, bạn chỉ có thể đình chỉ nhân viên này";
+            }
+            return er;
+        }
+    }
+    
+    public static String deleteStudent(String StudentId) {
+        String query = "EXEC SP_DeleteStudent ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, StudentId);
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Xoá sinh viên thành công!";
+            } else {
+                return "Xoá sinh viên thất bại, vui lòng kiểm tra lại!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("REFERENCE constraint")) {
+                return "Không thể xoá sinh viên vì đang được sử dụng, bạn chỉ có thể đình ngưng sinh viên này";
+            }
+            return er;
+        }
+    }
+    
+    public static String deleteClass(String ClassId) {
+        String query = "EXEC SP_DeleteClass ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, ClassId);
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Xoá lớp học thành công!";
+            } else {
+                return "Xoá lớp học thất bại, vui lòng kiểm tra lại!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("REFERENCE constraint")) {
+                return "Không thể xoá lớp học vì đang được sử dụng, bạn chỉ có thể đình ngưng lớp học này";
+            }
+            return er;
         }
     }
 

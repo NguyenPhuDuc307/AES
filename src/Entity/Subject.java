@@ -18,6 +18,12 @@ public class Subject {
     public Subject() {
     }
 
+    public Subject(String SubjectId, String SubjectName, int CreditsNumber) {
+        this.SubjectId = SubjectId;
+        this.SubjectName = SubjectName;
+        this.CreditsNumber = CreditsNumber;
+    }
+    
     public Subject(String SubjectId, String SubjectName, int CreditsNumber, boolean Enable) {
         this.SubjectId = SubjectId;
         this.SubjectName = SubjectName;

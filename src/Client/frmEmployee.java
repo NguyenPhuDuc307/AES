@@ -7,6 +7,7 @@ package Client;
 import Entity.Employee;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -63,6 +64,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         btnSave.setVisible(false);
         btnHuy.setVisible(false);
         txtId.setEnabled(false);
+        btnRemove.setVisible(false);
         txtTrangthai.setEnabled(false);
 
         tb_Employee.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã NV", "Họ tên", "Email", "Số điện thoại", "Giới tính", "Địa chỉ", "Trạng thái", "Quyền truy cập"}) {
@@ -163,6 +165,8 @@ public final class frmEmployee extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txtTrangthai = new javax.swing.JTextField();
         btnHuy = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        btnRemove = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý nhân viên");
@@ -229,6 +233,11 @@ public final class frmEmployee extends javax.swing.JFrame {
         txtEmail.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         txtSDT.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        txtSDT.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtSDTKeyTyped(evt);
+            }
+        });
 
         txtAddess.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
@@ -302,6 +311,20 @@ public final class frmEmployee extends javax.swing.JFrame {
             }
         });
 
+        jLabel8.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 204, 102));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("QUẢN LÝ NHÂN VIÊN");
+
+        btnRemove.setBackground(new java.awt.Color(255, 204, 102));
+        btnRemove.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        btnRemove.setText("Xoá");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnEdit, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnDelete, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSave, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -325,6 +348,8 @@ public final class frmEmployee extends javax.swing.JFrame {
         jDesktopPane1.setLayer(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(txtTrangthai, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnHuy, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnRemove, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
@@ -357,21 +382,20 @@ public final class frmEmployee extends javax.swing.JFrame {
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(txtTrangthai, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE))
+                            .addComponent(lbTB)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbTB)
-                                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                        .addComponent(rNam, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(rNu, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(rKhac)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addComponent(rNam, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(rNu, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(rKhac)))
                         .addGap(283, 283, 283))
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
                         .addComponent(btnEdit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnDelete)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSave)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -381,6 +405,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnReload)
                 .addContainerGap())
+            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -390,8 +415,11 @@ public final class frmEmployee extends javax.swing.JFrame {
                     .addComponent(btnEdit)
                     .addComponent(btnDelete)
                     .addComponent(btnSave)
-                    .addComponent(btnHuy))
+                    .addComponent(btnHuy)
+                    .addComponent(btnRemove))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel8)
+                .addGap(18, 18, 18)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -427,7 +455,7 @@ public final class frmEmployee extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lbTB)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 293, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -494,6 +522,8 @@ public final class frmEmployee extends javax.swing.JFrame {
         btnEdit.setEnabled(true);
         btnDelete.setEnabled(false);
         btnDelete.setVisible(true);
+        btnRemove.setEnabled(false);
+        btnRemove.setVisible(true);
 
         // lấy dòng dl hiện tại mình đang nhấn chuột
         int row = this.tb_Employee.getSelectedRow();
@@ -546,6 +576,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         EnableTxt(true);
         btnDelete.setEnabled(true);
+        btnRemove.setEnabled(true);
         btnSave.setVisible(true);
         btnHuy.setVisible(true);
         btnEdit.setEnabled(false);
@@ -596,6 +627,7 @@ public final class frmEmployee extends javax.swing.JFrame {
 
                 EnableTxt(false);
                 btnDelete.setVisible(false);
+                btnRemove.setVisible(false);
                 btnSave.setVisible(false);
                 btnHuy.setVisible(false);
                 txtSDT.setText("");
@@ -689,6 +721,7 @@ public final class frmEmployee extends javax.swing.JFrame {
         // TODO add your handling code here:
         EnableTxt(false);
         btnDelete.setVisible(false);
+        btnRemove.setVisible(false);
         btnSave.setVisible(false);
         btnHuy.setVisible(false);
         txtSDT.setText("");
@@ -700,6 +733,77 @@ public final class frmEmployee extends javax.swing.JFrame {
         rNu.setSelected(false);
         rKhac.setSelected(false);
     }//GEN-LAST:event_btnHuyActionPerformed
+
+    private void txtSDTKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSDTKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtSDTKeyTyped
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        if (!txtId.getText().isEmpty()) {
+            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xoá?", "Thông báo", JOptionPane.OK_CANCEL_OPTION);
+
+            if (input == 0) {
+                String EmployeeId = txtId.getText();
+
+                if (!EmployeeId.isEmpty()) {
+                    // nối thông tin gửi đi thành một chuỗi
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("deleteEmployee", EmployeeId);
+
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+
+                    // kết quả trả về tại đây
+                    String ketqua = "";
+
+                    try {
+                        // Socket nhận tham tham số là địa chỉ IP và Host
+                        socket = new Socket("127.0.0.1", 8888);
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        in = new Scanner(socket.getInputStream());
+                        out.println(inputBase64);
+
+                        // lấy ra kết quả
+                        ketqua = String.valueOf(in.nextLine());
+                        // lấy chuỗi string từ chuỗi byte
+                        String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+                        // nếu đăng nhập thành công
+                        
+                        show_employee();
+
+                        JOptionPane.showMessageDialog(null, ketquaString);
+
+                        EnableTxt(false);
+                        btnDelete.setVisible(false);
+                        btnRemove.setVisible(false);
+                        btnSave.setVisible(false);
+                        btnHuy.setVisible(false);
+                        txtSDT.setText("");
+                        txtAddess.setText("");
+                        txtEmail.setText("");
+                        txtId.setText("");
+                        txtName.setText("");
+                        rNam.setSelected(false);
+                        rNu.setSelected(false);
+                        rKhac.setSelected(false);
+                    } catch (IOException e) {
+                        try {
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        } catch (IOException ex) {
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
 
     /**
      * @param args the command line arguments
@@ -739,6 +843,7 @@ public final class frmEmployee extends javax.swing.JFrame {
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnReload;
+    private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
     private javax.swing.JDesktopPane jDesktopPane1;
     private javax.swing.JLabel jLabel1;
@@ -748,6 +853,7 @@ public final class frmEmployee extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTB;
     private javax.swing.JRadioButton rKhac;

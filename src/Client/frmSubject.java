@@ -4,8 +4,10 @@
  */
 package Client;
 
+import Entity.Subject;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -22,7 +24,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author nguyenphuduc
  */
-public final class frmClass extends javax.swing.JFrame {
+public final class frmSubject extends javax.swing.JFrame {
 
     /**
      * Creates new form frmClass
@@ -34,26 +36,27 @@ public final class frmClass extends javax.swing.JFrame {
     private boolean ENABLE;
     private int action = 0;
 
-    public frmClass() {
+    public frmSubject() {
         initComponents();
 
         txtMa.setEnabled(false);
 
-        tb_Class.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã lớp học", "Tên lớp học", "Trạng thái"}) {
+        tb_Subject.setModel(new javax.swing.table.DefaultTableModel(new Object[][]{}, new String[]{"Mã môn học", "Tên môn học", "Số tín chỉ", "Trạng thái"}) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         });
 
-        tb_Class.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 18));
-        TableColumnModel column = tb_Class.getColumnModel();
-        column.getColumn(0).setPreferredWidth(10);
+        tb_Subject.getTableHeader().setFont(new Font("#9Slide03 SFU Futura_03", Font.PLAIN, 16));
+        TableColumnModel column = tb_Subject.getColumnModel();
+        column.getColumn(0).setPreferredWidth(80);
         column.getColumn(1).setPreferredWidth(250);
 
         EnableTxt(false);
         btnSua.setEnabled(false);
         btnXoa.setVisible(false);
+        btnDelete.setVisible(false);
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
 
@@ -63,14 +66,13 @@ public final class frmClass extends javax.swing.JFrame {
         show_class();
     }
 
-    public static List<Entity.Class> listClass = new ArrayList<>();
+    public static List<Subject> listSubjects = new ArrayList<>();
 
     private void EnableTxt(boolean b) {
         txtTen.setEnabled(b);
         txtMa.setEnabled(b);
+        txtTinChi.setEnabled(b);
 
-//        r1.setEnabled(b);
-//        r2.setEnabled(b);
         if (!b) {
             lbTB.setText("Đã khoá chỉnh sửa");
             lbTB.setForeground(Color.RED);
@@ -88,7 +90,7 @@ public final class frmClass extends javax.swing.JFrame {
     public void show_class() {
 
         // nối thông tin gửi đi thành một chuỗi
-        String inputString = StringHandling.StringHandling.stringSoncatenation("getAllClass", "null");
+        String inputString = StringHandling.StringHandling.stringSoncatenation("getAllSubjects", "null");
 
         // chuyển thông tin về dạng byte
         byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -111,10 +113,10 @@ public final class frmClass extends javax.swing.JFrame {
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
 
             if (!ketqua.isEmpty()) {
-                DefaultTableModel model = (DefaultTableModel) tb_Class.getModel();
-                StringHandling.StringHandling.getDefaultTableModel_Class(model, ketquaString);
+                DefaultTableModel model = (DefaultTableModel) tb_Subject.getModel();
+                StringHandling.StringHandling.getDefaultTableModel_Subject(model, ketquaString);
 
-                StringHandling.StringHandling.getList_Class(listClass, ketquaString);
+                StringHandling.StringHandling.getList_Subject(listSubjects, ketquaString);
             }
             socket.close();
         } catch (IOException e) {
@@ -145,11 +147,15 @@ public final class frmClass extends javax.swing.JFrame {
         txtTen = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tb_Class = new javax.swing.JTable();
+        tb_Subject = new javax.swing.JTable();
         r1 = new javax.swing.JRadioButton();
         r2 = new javax.swing.JRadioButton();
         jLabel3 = new javax.swing.JLabel();
         lbTB = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        txtTinChi = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý lớp học");
@@ -203,32 +209,37 @@ public final class frmClass extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Mã lớp");
+        jLabel1.setText("Mã môn học");
 
         txtMa.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        txtMa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtMaKeyTyped(evt);
+            }
+        });
 
         txtTen.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Tên lớp");
+        jLabel2.setText("Tên môn học");
 
-        tb_Class.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        tb_Class.setModel(new javax.swing.table.DefaultTableModel(
+        tb_Subject.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        tb_Subject.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Mã lớp học", "Tên lớp học", "Trạng thái"
+
             }
         ));
-        tb_Class.setRowHeight(30);
-        tb_Class.addMouseListener(new java.awt.event.MouseAdapter() {
+        tb_Subject.setRowHeight(30);
+        tb_Subject.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tb_ClassMouseClicked(evt);
+                tb_SubjectMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tb_Class);
+        jScrollPane1.setViewportView(tb_Subject);
 
         r1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         r1.setForeground(new java.awt.Color(255, 255, 255));
@@ -256,6 +267,31 @@ public final class frmClass extends javax.swing.JFrame {
         lbTB.setForeground(new java.awt.Color(255, 51, 0));
         lbTB.setText("Đã khoá chỉnh sửa");
 
+        jLabel4.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Số tín chỉ");
+
+        txtTinChi.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        txtTinChi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTinChiKeyTyped(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(255, 204, 102));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel8.setText("QUẢN LÝ MÔN HỌC");
+
+        btnDelete.setBackground(new java.awt.Color(255, 204, 102));
+        btnDelete.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        btnDelete.setText("Xoá");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         jDesktopPane1.setLayer(btnThem, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnSua, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(btnXoa, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -270,46 +306,55 @@ public final class frmClass extends javax.swing.JFrame {
         jDesktopPane1.setLayer(r2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(lbTB, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(txtTinChi, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(btnDelete, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtTen, javax.swing.GroupLayout.DEFAULT_SIZE, 592, Short.MAX_VALUE))
-                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
+                                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lbTB)
+                                    .addComponent(txtMa)
+                                    .addComponent(txtTinChi)
+                                    .addComponent(txtTen)
                                     .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                        .addComponent(r1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(r2))))
-                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                                .addComponent(btnThem)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnHuy)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lbTB)
+                                            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                                                .addComponent(r1)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(r2)))
+                                        .addGap(0, 156, Short.MAX_VALUE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(btnThem)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSua, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnXoa, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnLuu, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnHuy, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -320,22 +365,33 @@ public final class frmClass extends javax.swing.JFrame {
                     .addComponent(btnSua)
                     .addComponent(btnXoa)
                     .addComponent(btnLuu)
-                    .addComponent(btnHuy))
-                .addGap(11, 11, 11)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(r1)
-                    .addComponent(r2)
-                    .addComponent(jLabel3))
-                .addGap(8, 8, 8)
-                .addComponent(lbTB)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 433, Short.MAX_VALUE))
+                    .addComponent(btnHuy)
+                    .addComponent(btnDelete))
+                .addGap(18, 18, 18)
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(txtMa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtTinChi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(r1)
+                            .addComponent(r2)
+                            .addComponent(jLabel3))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbTB)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -353,58 +409,12 @@ public final class frmClass extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tb_ClassMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_ClassMouseClicked
+    private void r2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r2ActionPerformed
         // TODO add your handling code here:
-        btnSua.setEnabled(true);
-        btnXoa.setEnabled(false);
-        btnXoa.setVisible(true);
-
-        // lấy dòng dl hiện tại mình đang nhấn chuột
-        int row = this.tb_Class.getSelectedRow();
-        //lấy EmployeeID vừa nhận và ssu đó đổi sang string
-        String ClassId = (this.tb_Class.getModel()).getValueAt(row, 0).toString();
-
-        txtMa.setText(tb_Class.getValueAt(row, 0).toString());
-        txtTen.setText(tb_Class.getValueAt(row, 1).toString());
-
-        if (tb_Class.getValueAt(row, 2).toString().equals("Đang học")) {
-            btnXoa.setText("Ngưng");
-        } else {
-            btnXoa.setText("Tiếp tục");
-        }
-
-        Entity.Class cl = StringHandling.StringHandling.getClass(listClass, ClassId);
-
-        ENABLE = cl.isEnable();
-
-        switch (tb_Class.getValueAt(row, 2).toString()) {
-            case "Đang học" -> {
-                r1.setSelected(true);
-                r2.setSelected(false);
-            }
-            default -> {
-                r1.setSelected(false);
-                r2.setSelected(true);
-            }
-        }
-    }//GEN-LAST:event_tb_ClassMouseClicked
-
-    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
-        // TODO add your handling code here:
-        EnableTxt(true);
-        btnLuu.setVisible(true);
-        btnHuy.setVisible(true);
         r1.setSelected(false);
-        r2.setSelected(false);
-        btnSua.setEnabled(false);
-
-        txtMa.setText("");
-        txtTen.setText("");
-
-        action = 1;
-
-        ENABLE = true;
-    }//GEN-LAST:event_btnThemActionPerformed
+        r2.setSelected(true);
+        ENABLE = !r2.isSelected();
+    }//GEN-LAST:event_r2ActionPerformed
 
     private void r1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r1ActionPerformed
         // TODO add your handling code here:
@@ -416,62 +426,78 @@ public final class frmClass extends javax.swing.JFrame {
             ENABLE = true;
     }//GEN-LAST:event_r1ActionPerformed
 
-    private void r2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_r2ActionPerformed
+    private void tb_SubjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tb_SubjectMouseClicked
         // TODO add your handling code here:
-        r1.setSelected(false);
-        r2.setSelected(true);
-        if (r2.isSelected()) {
-            ENABLE = false;
-        } else
-            ENABLE = true;
-    }//GEN-LAST:event_r2ActionPerformed
+        btnSua.setEnabled(true);
+        btnXoa.setEnabled(false);
+        btnXoa.setVisible(true);
+        btnDelete.setEnabled(false);
+        btnDelete.setVisible(true);
+
+        // lấy dòng dl hiện tại mình đang nhấn chuột
+        int row = this.tb_Subject.getSelectedRow();
+        //lấy EmployeeID vừa nhận và ssu đó đổi sang string
+        String SubjectId = (this.tb_Subject.getModel()).getValueAt(row, 0).toString();
+
+        txtMa.setText(tb_Subject.getValueAt(row, 0).toString());
+        txtTen.setText(tb_Subject.getValueAt(row, 1).toString());
+        txtTinChi.setText(tb_Subject.getValueAt(row, 2).toString());
+
+        if (tb_Subject.getValueAt(row, 3).toString().equals("Đang học")) {
+            btnXoa.setText("Ngưng");
+        } else {
+            btnXoa.setText("Tiếp tục");
+        }
+
+        Subject subject = StringHandling.StringHandling.getSubject(listSubjects, SubjectId);
+
+        ENABLE = subject.isEnable();
+
+        switch (tb_Subject.getValueAt(row, 3).toString()) {
+            case "Đang học" -> {
+                r1.setSelected(true);
+                r2.setSelected(false);
+            }
+            default -> {
+                r1.setSelected(false);
+                r2.setSelected(true);
+            }
+        }
+    }//GEN-LAST:event_tb_SubjectMouseClicked
 
     private void btnHuyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHuyActionPerformed
         // TODO add your handling code here:
         EnableTxt(false);
         btnThem.setEnabled(true);
         btnXoa.setVisible(false);
+        btnDelete.setVisible(false);
         btnLuu.setVisible(false);
         btnHuy.setVisible(false);
         btnSua.setEnabled(false);
         txtMa.setText("");
         txtTen.setText("");
+        txtTinChi.setText("");
         r1.setSelected(false);
         r2.setSelected(false);
         r1.setEnabled(false);
         r2.setEnabled(false);
     }//GEN-LAST:event_btnHuyActionPerformed
 
-    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
-        // TODO add your handling code here:
-        EnableTxt(true);
-        btnLuu.setVisible(true);
-        btnThem.setEnabled(false);
-        btnHuy.setVisible(true);
-        r1.setEnabled(true);
-        r2.setEnabled(true);
-        btnSua.setEnabled(false);
-        btnXoa.setEnabled(true);
-
-        txtMa.setEnabled(false);
-
-        action = 2;
-    }//GEN-LAST:event_btnSuaActionPerformed
-
     private void btnLuuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLuuActionPerformed
         // TODO add your handling code here:
-        String ClassId = txtMa.getText();
-        String ClassName = txtTen.getText();
+        String SubjectId = txtMa.getText();
+        String SubjectName = txtTen.getText();
+        String Num = txtTinChi.getText();
 
-        if (!ClassId.isEmpty() && !ClassName.isEmpty()) {
+        if (!SubjectId.isEmpty() && !SubjectName.isEmpty()) {
 
             // nối thông tin gửi đi thành một chuỗi
             String inputString = "";
             if (action == 1) {
-                inputString = StringHandling.StringHandling.stringSoncatenation("addClass", ClassId, ClassName);
+                inputString = StringHandling.StringHandling.stringSoncatenation("addSubject", SubjectId, SubjectName, Num);
             }
             if (action == 2) {
-                inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(ENABLE));
+                inputString = StringHandling.StringHandling.stringSoncatenation("updateSubject", SubjectId, SubjectName, Num, String.valueOf(ENABLE));
             }
 
             // chuyển thông tin về dạng byte
@@ -501,10 +527,12 @@ public final class frmClass extends javax.swing.JFrame {
                 EnableTxt(false);
                 btnThem.setEnabled(true);
                 btnXoa.setVisible(false);
+                btnDelete.setVisible(false);
                 btnLuu.setVisible(false);
                 btnHuy.setVisible(false);
                 txtMa.setText("");
                 txtTen.setText("");
+                txtTinChi.setText("");
                 r1.setSelected(false);
                 r2.setSelected(false);
                 r1.setEnabled(false);
@@ -528,8 +556,9 @@ public final class frmClass extends javax.swing.JFrame {
                     JOptionPane.OK_CANCEL_OPTION);
 
             if (input == 0) {
-                String ClassId = txtMa.getText();
-                String ClassName = txtTen.getText();
+                String SubjectId = txtMa.getText();
+                String SubjectName = txtTen.getText();
+                String Num = txtTinChi.getText();
 
                 if (ENABLE == true) {
                     ENABLE = false;
@@ -537,9 +566,9 @@ public final class frmClass extends javax.swing.JFrame {
                     ENABLE = true;
                 }
 
-                if (!ClassId.isEmpty()) {
+                if (!SubjectId.isEmpty()) {
                     // nối thông tin gửi đi thành một chuỗi
-                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateClass", ClassId, ClassName, String.valueOf(ENABLE));
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("updateSubject", SubjectId, SubjectName, Num, String.valueOf(ENABLE));
 
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
@@ -572,6 +601,7 @@ public final class frmClass extends javax.swing.JFrame {
                         btnHuy.setVisible(false);
                         txtMa.setText("");
                         txtTen.setText("");
+                        txtTinChi.setText("");
                         r1.setSelected(false);
                         r2.setSelected(false);
                         r1.setEnabled(false);
@@ -588,6 +618,121 @@ public final class frmClass extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnXoaActionPerformed
+
+    private void btnSuaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSuaActionPerformed
+        // TODO add your handling code here:
+        EnableTxt(true);
+        btnLuu.setVisible(true);
+        btnThem.setEnabled(false);
+        btnHuy.setVisible(true);
+        r1.setEnabled(true);
+        r2.setEnabled(true);
+        btnSua.setEnabled(false);
+        btnXoa.setEnabled(true);
+        btnDelete.setEnabled(true);
+        txtMa.setEnabled(false);
+
+        action = 2;
+    }//GEN-LAST:event_btnSuaActionPerformed
+
+    private void btnThemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnThemActionPerformed
+        // TODO add your handling code here:
+        EnableTxt(true);
+        btnLuu.setVisible(true);
+        btnHuy.setVisible(true);
+        r1.setSelected(false);
+        r2.setSelected(false);
+        btnSua.setEnabled(false);
+
+        txtMa.setText("");
+        txtTen.setText("");
+        txtTinChi.setText("");
+        action = 1;
+
+        ENABLE = true;
+    }//GEN-LAST:event_btnThemActionPerformed
+
+    private void txtTinChiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTinChiKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+        if (!(Character.isDigit(c) || (c == KeyEvent.VK_BACK_SPACE) || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtTinChiKeyTyped
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        if (!txtMa.getText().isEmpty()) {
+            int input = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xoá?", "Thông báo",
+                    JOptionPane.OK_CANCEL_OPTION);
+
+            if (input == 0) {
+                String SubjectId = txtMa.getText();
+
+                if (!SubjectId.isEmpty()) {
+                    // nối thông tin gửi đi thành một chuỗi
+                    String inputString = StringHandling.StringHandling.stringSoncatenation("deleteSubject", SubjectId);
+
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = inputString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+
+                    // kết quả trả về tại đây
+                    String ketqua = "";
+
+                    try {
+                        // Socket nhận tham tham số là địa chỉ IP và Host
+                        socket = new Socket("127.0.0.1", 8888);
+                        out = new PrintWriter(socket.getOutputStream(), true);
+                        in = new Scanner(socket.getInputStream());
+                        out.println(inputBase64);
+
+                        // lấy ra kết quả
+                        ketqua = String.valueOf(in.nextLine());
+                        // lấy chuỗi string từ chuỗi byte
+                        String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+                        // nếu đăng nhập thành công
+                        JOptionPane.showMessageDialog(null, ketquaString);
+
+                        show_class();
+                        socket.close();
+
+                        EnableTxt(false);
+                        btnThem.setEnabled(true);
+                        btnXoa.setVisible(false);
+                        btnDelete.setVisible(false);
+                        btnLuu.setVisible(false);
+                        btnHuy.setVisible(false);
+                        txtMa.setText("");
+                        txtTen.setText("");
+                        txtTinChi.setText("");
+                        r1.setSelected(false);
+                        r2.setSelected(false);
+                        r1.setEnabled(false);
+                        r2.setEnabled(false);
+                    } catch (IOException e) {
+                        try {
+                            if (socket != null) {
+                                socket.close();
+                            }
+                        } catch (IOException ex) {
+                        }
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void txtMaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMaKeyTyped
+        // TODO add your handling code here:
+       char c = evt.getKeyChar();
+
+        if (!((Character.isUnicodeIdentifierPart(c) || (c == KeyEvent.VK_BACK_SPACE) || (c == KeyEvent.VK_DELETE)))) {
+            getToolkit().beep();
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtMaKeyTyped
 
     /**
      * @param args the command line arguments
@@ -606,25 +751,27 @@ public final class frmClass extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(frmClass.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(frmSubject.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new frmClass().setVisible(true);
+                new frmSubject().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnHuy;
     private javax.swing.JButton btnLuu;
     private javax.swing.JButton btnSua;
@@ -634,12 +781,15 @@ public final class frmClass extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lbTB;
     private javax.swing.JRadioButton r1;
     private javax.swing.JRadioButton r2;
-    private javax.swing.JTable tb_Class;
+    private javax.swing.JTable tb_Subject;
     private javax.swing.JTextField txtMa;
     private javax.swing.JTextField txtTen;
+    private javax.swing.JTextField txtTinChi;
     // End of variables declaration//GEN-END:variables
 }

@@ -61,6 +61,7 @@ public class frmRegister extends javax.swing.JFrame {
         cPhongcongtac = new javax.swing.JRadioButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Đăng ký tài khoản");
 
         txtSubmit.setBackground(new java.awt.Color(255, 204, 102));
         txtSubmit.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 18)); // NOI18N
