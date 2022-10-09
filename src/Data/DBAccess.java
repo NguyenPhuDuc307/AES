@@ -4,6 +4,7 @@ import Entity.Employee;
 import Entity.Class;
 import Entity.Student;
 import Entity.Subject;
+import Entity.Transcript;
 import Entity.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -100,6 +101,27 @@ public class DBAccess {
                         resultSet.getString(7),
                         resultSet.getBoolean(8),
                         resultSet.getInt(9)));
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
+    public static List<Transcript> getAllTranscripts() {
+        List<Transcript> list = new ArrayList<>();
+        String query = "EXEC SP_GetTranscripts";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(new Transcript(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3),
+                        resultSet.getString(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getFloat(7)));
             }
         } catch (SQLException e) {
         }
@@ -229,7 +251,7 @@ public class DBAccess {
         }
         return string.substring(1);
     }
-    
+
     public static String getAllSubjectName() {
         String string = "";
         String query = "EXEC SP_GetSubjectName";
@@ -266,7 +288,7 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     public static String insertSubject(Subject subject) {
         String query = "SP_AddSubject ?, ?, ?";
         try {
@@ -289,16 +311,15 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     public static String updateSubject(Subject subject) {
         String query = "EXEC SP_UpDateSubject ?,?,?,?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, subject.getSubjectId());
             preparedStatement.setString(2, subject.getSubjectName());
-            preparedStatement.setInt(3, subject.getCreditsNumber());            
+            preparedStatement.setInt(3, subject.getCreditsNumber());
             preparedStatement.setBoolean(4, subject.isEnable());
-
 
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
@@ -310,7 +331,7 @@ public class DBAccess {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
-    
+
     public static String deleteSubject(String SubjectId) {
         String query = "EXEC SP_DeleteSubject ?";
         try {
@@ -331,7 +352,7 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     public static String deleteEmployee(String EmployeeId) {
         String query = "EXEC SP_DeleteEmployee ?";
         try {
@@ -352,7 +373,7 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     public static String deleteStudent(String StudentId) {
         String query = "EXEC SP_DeleteStudent ?";
         try {
@@ -373,7 +394,7 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     public static String deleteClass(String ClassId) {
         String query = "EXEC SP_DeleteClass ?";
         try {
@@ -391,6 +412,26 @@ public class DBAccess {
             if (er.contains("REFERENCE constraint")) {
                 return "Không thể xoá lớp học vì đang được sử dụng, bạn chỉ có thể đình ngưng lớp học này";
             }
+            return er;
+        }
+    }
+
+    public static String deleteTranscripts(String StudentId, String SubjectId, String EmployeeId) {
+        String query = "EXEC SP_DeleteTranscript ?, ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, StudentId);
+            preparedStatement.setString(2, SubjectId);
+            preparedStatement.setString(3, EmployeeId);
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Xoá điểm số thành công!";
+            } else {
+                return "Xoá điểm số thất bại, vui lòng kiểm tra lại!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
             return er;
         }
     }
@@ -468,6 +509,32 @@ public class DBAccess {
             return er;
         }
     }
+    
+    // Insert Class
+    public static String insertTranscript(Transcript transcript) {
+        String query = "EXEC SP_AddTranscript ?, ?, ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, transcript.getStudentId());
+            preparedStatement.setString(2, transcript.getSubjectId());
+            preparedStatement.setString(3, transcript.getEmployeeId());
+            preparedStatement.setFloat(4, transcript.getTranscripts());
+            
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Nhập điểm thành công!";
+            } else {
+                return "Nhập điểm thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            String er = e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+            if (er.contains("Violation of PRIMARY KEY")) {
+                return "Nhập điểm thất bại";
+            }
+            return er;
+        }
+    }
 
     // Update Class
     public static String updateStudent(Student student) {
@@ -488,6 +555,26 @@ public class DBAccess {
                 return "Cập nhật thông tin thành công!";
             } else {
                 return "Cập nhật thông tin thất bại, vui lòng kiểm tra lại thông tin!";
+            }
+        } catch (SQLException e) {
+            return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
+        }
+    }
+    
+    public static String updateTranscript(Transcript transcript) {
+        String query = "EXEC SP_UpDateStudent ?, ?, ?, ?, ?, ?, ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, transcript.getStudentId());
+            preparedStatement.setString(2, transcript.getSubjectId());
+            preparedStatement.setString(3, transcript.getEmployeeId());
+            preparedStatement.setFloat(4, transcript.getTranscripts());
+
+            int result = preparedStatement.executeUpdate();
+            if (result != 0) {
+                return "Cập nhật điểm thành công!";
+            } else {
+                return "Cập nhật điểm thất bại, vui lòng kiểm tra lại thông tin!";
             }
         } catch (SQLException e) {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";

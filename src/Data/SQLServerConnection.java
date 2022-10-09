@@ -12,7 +12,7 @@ public class SQLServerConnection {
             Connection con = DriverManager.getConnection(URL);
 
             return con;
-        } catch (Exception ex) {
+        } catch (ClassNotFoundException | SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.toString(), "Lỗi", JOptionPane.ERROR_MESSAGE);
             return null;
         }

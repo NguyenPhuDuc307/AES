@@ -9,11 +9,17 @@ import Entity.Employee;
 import Entity.Class;
 import Entity.Student;
 import Entity.Subject;
+import Entity.Transcript;
+import java.awt.Color;
+import java.awt.Component;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.Base64;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -81,6 +87,47 @@ public class StringHandling {
         return inputBase64;
     }
 
+    public static void changeTable(JTable table, int column_index, String text) {
+        table.getColumnModel().getColumn(column_index).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                String st_val = removeAccent(String.valueOf(table.getValueAt(row, column_index).toString()));
+                if (text.isEmpty()) {
+
+                    c.setBackground(Color.getHSBColor(255, 204, 102));
+                } else {
+                    if (st_val.toLowerCase().contains(text.toLowerCase())) {
+                        c.setBackground(Color.getHSBColor(255, 204, 200));
+                    } else {
+                        c.setBackground(Color.getHSBColor(255, 204, 102));
+                    }
+                }
+                return c;
+            }
+        });
+    }
+
+    public void changeTabledefault(JTable table, int column_index, String text) {
+        table.getColumnModel().getColumn(column_index).setCellRenderer(new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                c.setBackground(Color.ORANGE);
+                return c;
+            }
+        });
+    }
+
+    public static String removeAccent(String s) {
+
+        String temp = Normalizer.normalize(s, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(temp).replaceAll("");
+    }
+
     //chuyển list Employee thành chuỗi
     public static String getStringEmployee() {
         String string = "";
@@ -88,6 +135,18 @@ public class StringHandling {
         if (!listEmployees.isEmpty()) {
             for (Employee employee : listEmployees) {
                 string += employee + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
+    }
+
+    public static String getStringTranscript() {
+        String string = "";
+        List<Transcript> listTranscripts = DBAccess.getAllTranscripts();
+        if (!listTranscripts.isEmpty()) {
+            for (Transcript transcript : listTranscripts) {
+                string += transcript + "\n";
             }
             return string.substring(0, string.length() - 1);
         }
@@ -134,84 +193,7 @@ public class StringHandling {
     }
 
     // chuyển chuỗi thành model
-    public static void getDefaultTableModel_Employee(DefaultTableModel model, String string) {
-
-        while (model.getRowCount() > 0) {
-            model.removeRow(0);
-        }
-
-        int COLUMN = 9;
-
-        // ngắt chuỗi thành array
-        String arrString[] = string.split("\n");
-
-        for (int i = 0; i < arrString.length; i += COLUMN) {
-
-            // tạo ra đối tượng object
-            Object[] row = new Object[COLUMN - 1];
-            for (int j = i; j < i + COLUMN; j++) {
-
-                switch (j % COLUMN) {
-                    case 0:
-                        row[0] = String.valueOf(arrString[j]);
-                        break;
-                    case 1:
-                        break;
-                    case 2:
-                        row[1] = String.valueOf(arrString[j]);
-                        break;
-                    case 3:
-                        row[2] = String.valueOf(arrString[j]);
-                        break;
-                    case 4:
-                        row[3] = String.valueOf(arrString[j]);
-                        break;
-                    case 5:
-                        if (null == String.valueOf(arrString[j])) {
-                            row[4] = "Khác";
-                        } else {
-                            switch (String.valueOf(arrString[j])) {
-                                case "1":
-                                    row[4] = "Nam";
-                                    break;
-                                case "2":
-                                    row[4] = "Nữ";
-                                    break;
-                                default:
-                                    row[4] = "Khác";
-                                    break;
-                            }
-                        }
-                        break;
-                    case 6:
-                        row[5] = String.valueOf(arrString[j]);
-                        break;
-                    case 7:
-                        if (String.valueOf(arrString[j]).equals("true")) {
-                            row[6] = "Đang làm";
-                        } else {
-                            row[6] = "Nghỉ việc";
-                        }
-                        break;
-                    case 8:
-                        if (String.valueOf(arrString[j]).equals("1")) {
-                            row[7] = "Quản trị viên";
-                        } else {
-                            row[7] = "Phòng công tác";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            // lưu vào danh sách
-            model.addRow(row);
-        }
-    }
-
-    // chuyển chuỗi thành model
-    public static void getDefaultTableModel_Student(DefaultTableModel model, String string) {
+    public static void getDefaultTableModel_Employee(DefaultTableModel model, List<Employee> listEmployees) {
 
         while (model.getRowCount() > 0) {
             model.removeRow(0);
@@ -219,64 +201,61 @@ public class StringHandling {
 
         int COLUMN = 8;
 
-        // ngắt chuỗi thành array
-        String arrString[] = string.split("\n");
-
-        for (int i = 0; i < arrString.length; i += COLUMN) {
-
-            // tạo ra đối tượng object
+        for (Employee employee : listEmployees) {
             Object[] row = new Object[COLUMN];
-            for (int j = i; j < i + COLUMN; j++) {
-
-                switch (j % COLUMN) {
-                    case 0:
-                        row[0] = String.valueOf(arrString[j]);
-                        break;
-                    case 1:
-                        row[1] = String.valueOf(arrString[j]);
-                        break;
-                    case 2:
-                        row[2] = String.valueOf(arrString[j]);
-                        break;
-                    case 3:
-                        row[3] = String.valueOf(arrString[j]);
-                        break;
-                    case 4:
-                        row[4] = String.valueOf(arrString[j]);
-                        break;
-                    case 5:
-                        if (null == String.valueOf(arrString[j])) {
-                            row[5] = "Khác";
-                        } else {
-                            switch (String.valueOf(arrString[j])) {
-                                case "1":
-                                    row[5] = "Nam";
-                                    break;
-                                case "2":
-                                    row[5] = "Nữ";
-                                    break;
-                                default:
-                                    row[5] = "Khác";
-                                    break;
-                            }
-                        }
-                        break;
-                    case 6:
-                        row[6] = String.valueOf(arrString[j]);
-                        break;
-                    case 7:
-                        if (String.valueOf(arrString[j]).equals("true")) {
-                            row[7] = "Đang học";
-                        } else {
-                            row[7] = "Nghỉ học";
-                        }
-                        break;
-                    default:
-                        break;
-                }
-
+            row[0] = String.valueOf(employee.getEmployeeId());
+            row[1] = String.valueOf(employee.getFullName());
+            row[3] = String.valueOf(employee.getPhoneNumber());
+            row[2] = String.valueOf(employee.getEmail());
+            if (employee.getSex() == 1) {
+                row[4] = "Nam";
+            } else {
+                row[4] = "Nữ";
             }
-            // lưu vào danh sách
+
+            row[5] = String.valueOf(employee.getAddress());
+            if (employee.isEnable() == true) {
+                row[6] = "Đang làm";
+            } else {
+                row[6] = "Đã nghỉ việc";
+            }
+            if (employee.getRole() == 1) {
+                row[7] = "Quản trị viên";
+            } else {
+                row[7] = "Phòng công tác";
+            }
+            model.addRow(row);
+        }
+    }
+
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Student(DefaultTableModel model, List<Student> students) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 8;
+
+        for (Student student : students) {
+            Object[] row = new Object[COLUMN];
+            row[0] = String.valueOf(student.getStudentId());
+            row[1] = String.valueOf(student.getClassId());
+            row[2] = String.valueOf(student.getFullName());
+            row[3] = String.valueOf(student.getPhoneNumber());
+            row[4] = String.valueOf(student.getEmail());
+            if (student.getSex() == 1) {
+                row[5] = "Nam";
+            } else {
+                row[5] = "Nữ";
+            }
+
+            row[6] = String.valueOf(student.getAddress());
+            if (student.isEnable() == true) {
+                row[7] = "Đang học";
+            } else {
+                row[7] = "Đã thôi học";
+            }
             model.addRow(row);
         }
     }
@@ -299,15 +278,24 @@ public class StringHandling {
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0 -> employee.setEmployeeId(String.valueOf(arrString[j]));
-                    case 1 -> employee.setUserId(Integer.parseInt(arrString[j]));
-                    case 2 -> employee.setFullName(String.valueOf(arrString[j]));
-                    case 3 -> employee.setEmail(String.valueOf(arrString[j]));
-                    case 4 -> employee.setPhoneNumber(String.valueOf(arrString[j]));
-                    case 5 -> employee.setSex(Integer.parseInt(arrString[j]));
-                    case 6 -> employee.setAddress(String.valueOf(arrString[j]));
-                    case 7 -> employee.setEnable(Boolean.parseBoolean(arrString[j]));
-                    case 8 -> employee.setRole(Integer.parseInt(arrString[j]));
+                    case 0 ->
+                        employee.setEmployeeId(String.valueOf(arrString[j]));
+                    case 1 ->
+                        employee.setUserId(Integer.parseInt(arrString[j]));
+                    case 2 ->
+                        employee.setFullName(String.valueOf(arrString[j]));
+                    case 3 ->
+                        employee.setEmail(String.valueOf(arrString[j]));
+                    case 4 ->
+                        employee.setPhoneNumber(String.valueOf(arrString[j]));
+                    case 5 ->
+                        employee.setSex(Integer.parseInt(arrString[j]));
+                    case 6 ->
+                        employee.setAddress(String.valueOf(arrString[j]));
+                    case 7 ->
+                        employee.setEnable(Boolean.parseBoolean(arrString[j]));
+                    case 8 ->
+                        employee.setRole(Integer.parseInt(arrString[j]));
                     default -> {
                     }
                 }
@@ -336,9 +324,12 @@ public class StringHandling {
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0 -> cl.setClassIdString(String.valueOf(arrString[j]));
-                    case 1 -> cl.setClassName(String.valueOf(arrString[j]));
-                    case 2 -> cl.setEnable(Boolean.parseBoolean(arrString[j]));
+                    case 0 ->
+                        cl.setClassIdString(String.valueOf(arrString[j]));
+                    case 1 ->
+                        cl.setClassName(String.valueOf(arrString[j]));
+                    case 2 ->
+                        cl.setEnable(Boolean.parseBoolean(arrString[j]));
                     default -> {
                     }
                 }
@@ -366,10 +357,14 @@ public class StringHandling {
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0 -> subject.setSubjectId(String.valueOf(arrString[j]));
-                    case 1 -> subject.setSubjectName(String.valueOf(arrString[j]));
-                    case 2 -> subject.setCreditsNumber(Integer.parseInt(arrString[j]));
-                    case 3 -> subject.setEnable(Boolean.parseBoolean(arrString[j]));
+                    case 0 ->
+                        subject.setSubjectId(String.valueOf(arrString[j]));
+                    case 1 ->
+                        subject.setSubjectName(String.valueOf(arrString[j]));
+                    case 2 ->
+                        subject.setCreditsNumber(Integer.parseInt(arrString[j]));
+                    case 3 ->
+                        subject.setEnable(Boolean.parseBoolean(arrString[j]));
                     default -> {
                     }
                 }
@@ -379,14 +374,11 @@ public class StringHandling {
         }
     }
 
-    // chuyển chuỗi thành model
-    public static void getDefaultTableModel_Class(DefaultTableModel model, String string) {
+    public static void getList_Transcript(List<Transcript> list, String string) {
 
-        while (model.getRowCount() > 0) {
-            model.removeRow(0);
-        }
+        list.removeAll(list);
 
-        int COLUMN = 3;
+        int COLUMN = 7;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
@@ -394,41 +386,91 @@ public class StringHandling {
         for (int i = 0; i < arrString.length; i += COLUMN) {
 
             // tạo ra đối tượng object
-            Object[] row = new Object[COLUMN];
+            Transcript transcript = new Transcript();
+
             for (int j = i; j < i + COLUMN; j++) {
 
                 switch (j % COLUMN) {
-                    case 0:
-                        row[0] = String.valueOf(arrString[j]);
-                        break;
-                    case 1:
-                        row[1] = String.valueOf(arrString[j]);
-                        break;
-                    case 2:
-                        if (String.valueOf(arrString[j]).equals("true")) {
-                            row[2] = "Đang học";
-                        } else {
-                            row[2] = "Đã ngưng";
-                        }
-                        break;
-                    default:
-                        break;
+                    case 0 ->
+                        transcript.setStudentId(String.valueOf(arrString[j]));
+                    case 1 ->
+                        transcript.setStudentName(String.valueOf(arrString[j]));
+                    case 2 ->
+                        transcript.setClassIdString(String.valueOf(arrString[j]));
+                    case 3 ->
+                        transcript.setSubjectId(String.valueOf(arrString[j]));
+                    case 4 ->
+                        transcript.setSubjectName(String.valueOf(arrString[j]));
+                    case 5 ->
+                        transcript.setEmployeeName(String.valueOf(arrString[j]));
+                    case 6 ->
+                        transcript.setTranscripts(Float.parseFloat(arrString[j]));
+                    default -> {
+                    }
                 }
-
             }
             // lưu vào danh sách
+            list.add(transcript);
+        }
+    }
+
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Class(DefaultTableModel model, List<Class> listClass) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 3;
+
+        for (Entity.Class cla : listClass) {
+            Object[] row = new Object[COLUMN];
+            row[0] = String.valueOf(cla.getClassIdString());
+            row[1] = String.valueOf(cla.getClassName());
+
+            if (cla.isEnable() == true) {
+                row[2] = "Đang học";
+            } else {
+                row[2] = "Đã ngưng";
+            }
             model.addRow(row);
         }
     }
 
     // chuyển chuỗi thành model
-    public static void getDefaultTableModel_Subject(DefaultTableModel model, String string) {
+    public static void getDefaultTableModel_Subject(DefaultTableModel model, List<Subject> listSubjects) {
 
         while (model.getRowCount() > 0) {
             model.removeRow(0);
         }
 
         int COLUMN = 4;
+        
+        for (Subject subject : listSubjects) {
+            Object[] row = new Object[COLUMN];
+            row[0] = String.valueOf(subject.getSubjectId());
+            row[1] = String.valueOf(subject.getSubjectName());
+            row[2] = String.valueOf(subject.getCreditsNumber());
+
+            if (subject.isEnable() == true) {
+                row[3] = "Đang học";
+            } else {
+                row[3] = "Đã ngưng";
+            }
+            model.addRow(row);
+        }
+
+        
+    }
+
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Transcript(DefaultTableModel model, String string) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 7;
 
         // ngắt chuỗi thành array
         String arrString[] = string.split("\n");
@@ -450,11 +492,16 @@ public class StringHandling {
                         row[2] = String.valueOf(arrString[j]);
                         break;
                     case 3:
-                        if (String.valueOf(arrString[j]).equals("true")) {
-                            row[3] = "Đang học";
-                        } else {
-                            row[3] = "Đã ngưng";
-                        }
+                        row[3] = String.valueOf(arrString[j]);
+                        break;
+                    case 4:
+                        row[4] = String.valueOf(arrString[j]);
+                        break;
+                    case 5:
+                        row[5] = String.valueOf(arrString[j]);
+                        break;
+                    case 6:
+                        row[6] = String.valueOf(arrString[j]);
                         break;
                     default:
                         break;
@@ -505,7 +552,7 @@ public class StringHandling {
                         student.setAddress(String.valueOf(arrString[j]));
                         break;
                     case 7:
-                        student.setAddress(String.valueOf(arrString[j]));
+                        student.setEnable(Boolean.parseBoolean(arrString[j]));
                         break;
                     default:
                         break;
@@ -560,6 +607,15 @@ public class StringHandling {
         for (Subject subject : listSubject) {
             if (subject.getSubjectId().equals(SubjectId)) {
                 return subject;
+            }
+        }
+        return null;
+    }
+
+    public static Transcript getTranscript(List<Transcript> listTranscript, String StudentIdString, String SubjectId, String EmployeeId) {
+        for (Transcript transcript : listTranscript) {
+            if (transcript.getEmployeeId().equals(EmployeeId) || transcript.getStudentId().equals(StudentIdString) || transcript.getSubjectId().equals(SubjectId)) {
+                return transcript;
             }
         }
         return null;

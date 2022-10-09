@@ -50,7 +50,7 @@ public class frmAddEmployee extends javax.swing.JFrame {
         btnTieptuc = new javax.swing.JButton();
         btnThoat = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Thêm nhân viên");
 
         txtName.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N

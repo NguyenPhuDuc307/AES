@@ -9,6 +9,7 @@ import Entity.Employee;
 import Entity.Class;
 import Entity.Student;
 import Entity.Subject;
+import Entity.Transcript;
 import Entity.User;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -91,6 +92,15 @@ public class ServerThread implements Runnable {
                 case "getAllEmployee" -> {
                     // lấy ra list Employee dạng chuỗi
                     String resultString = StringHandling.StringHandling.getStringEmployee();
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                
+                case "getAllTranscripts" -> {
+                    String resultString = StringHandling.StringHandling.getStringTranscript();
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
                     String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
@@ -229,6 +239,15 @@ public class ServerThread implements Runnable {
                     // gửi đi
                     out.println(inputBase64);
                 }
+                case "deleteTranscript" -> {
+                    String arr[] = string.split("\n");
+                    String resultString = DBAccess.deleteTranscripts(arr[0],arr[1],arr[2]);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
                 case "addStudent" -> {
                     String arr[] = string.split("\n");
                     Student student = new Student(arr[0], arr[1], arr[2],arr[3],arr[4], Integer.parseInt(arr[5]), arr[6]);
@@ -239,10 +258,30 @@ public class ServerThread implements Runnable {
                     // gửi đi
                     out.println(inputBase64);
                 }
+                case "addTranscript" -> {
+                    String arr[] = string.split("\n");
+                    Transcript transcript = new Transcript(arr[0], arr[1], arr[2],Float.parseFloat(arr[3]));
+                    String resultString = DBAccess.insertTranscript(transcript);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
                 case "updateStudent" -> {
                     String arr[] = string.split("\n");
                     Student student = new Student(arr[0], arr[1], arr[2],arr[3],arr[4], Integer.parseInt(arr[5]), arr[6], Boolean.parseBoolean(arr[7]));
                     String resultString = DBAccess.updateStudent(student);
+                    // chuyển thông tin về dạng byte
+                    byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
+                    String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
+                    // gửi đi
+                    out.println(inputBase64);
+                }
+                case "updateTranscript" -> {
+                    String arr[] = string.split("\n");
+                    Transcript transcript = new Transcript(arr[0], arr[1], arr[2],Float.parseFloat(arr[3]));
+                    String resultString = DBAccess.updateTranscript(transcript);
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
                     String inputBase64 = Base64.getEncoder().encodeToString(inputByte);
