@@ -478,6 +478,23 @@ public class DBAccess {
         }
         return list;
     }
+    
+    public static List<Student> getAllStudents1() {
+        List<Student> list = new ArrayList<>();
+        String query = "EXEC SP_GetStudents";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                list.add(new Student(
+                        resultSet.getString(1),
+                        resultSet.getString(2),
+                        resultSet.getString(3)));
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
 
     // Insert Class
     public static String insertStudent(Student student) {

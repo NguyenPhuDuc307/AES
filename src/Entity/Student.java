@@ -31,6 +31,12 @@ public class Student {
         this.Sex = Sex;
         this.Address = Address;
     }
+    
+    public Student(String StudentId, String ClassId, String FullName) {
+        this.StudentId = StudentId;
+        this.ClassId = ClassId;
+        this.FullName = FullName;
+    }
 
     public Student(String StudentId, String ClassId, String FullName, String Email, String PhoneNumber, int Sex, String Address, boolean Enable) {
         this.StudentId = StudentId;
@@ -112,5 +118,9 @@ public class Student {
     @Override
     public String toString() {
         return StudentId + "\n" + ClassId + "\n" + FullName + "\n" + Email + "\n" + PhoneNumber + "\n" + Sex + "\n" + Address + "\n" + Enable;
+    }
+    
+    public String toString1() {
+        return StudentId + "\n" + ClassId + "\n" + FullName;
     }
 }

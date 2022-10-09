@@ -100,7 +100,11 @@ public class ServerThread implements Runnable {
                 }
                 
                 case "getAllTranscripts" -> {
-                    String resultString = StringHandling.StringHandling.getStringTranscript();
+                    String resultString1 = StringHandling.StringHandling.getStringTranscript();
+                    String resultString2 = StringHandling.StringHandling.getStringStudent1();
+                    
+                    String resultString = resultString1 + "\n\n" + resultString2;
+                    
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
                     String inputBase64 = Base64.getEncoder().encodeToString(inputByte);

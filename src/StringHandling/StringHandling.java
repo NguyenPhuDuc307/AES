@@ -152,6 +152,18 @@ public class StringHandling {
         }
         return string;
     }
+    
+    public static String getStringStudent1() {
+        String string = "";
+        List<Student> listStudents = DBAccess.getAllStudents1();
+        if (!listStudents.isEmpty()) {
+            for (Student student : listStudents) {
+                string += student.toString1() + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
+    }
 
     //chuyển list Class thành chuỗi
     public static String getStringClass() {
@@ -260,6 +272,24 @@ public class StringHandling {
         }
     }
 
+    // chuyển chuỗi thành model
+    public static void getDefaultTableModel_Student1(DefaultTableModel model, List<Student> students) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 3;
+
+        for (Student student : students) {
+            Object[] row = new Object[COLUMN];
+            row[0] = String.valueOf(student.getStudentId());
+            row[1] = String.valueOf(student.getClassId());
+            row[2] = String.valueOf(student.getFullName());
+            model.addRow(row);
+        }
+    }
+    
     // chuyển chuỗi thành model
     public static void getList_Employee(List<Employee> list, String string) {
 
@@ -553,6 +583,41 @@ public class StringHandling {
                         break;
                     case 7:
                         student.setEnable(Boolean.parseBoolean(arrString[j]));
+                        break;
+                    default:
+                        break;
+                }
+
+            }
+            // lưu vào danh sách
+            list.add(student);
+        }
+    }
+    
+    public static void getList_Student1(List<Student> list, String string) {
+
+        list.removeAll(list);
+
+        int COLUMN = 3;
+
+        // ngắt chuỗi thành array
+        String arrString[] = string.split("\n");
+
+        for (int i = 0; i < arrString.length; i += COLUMN) {
+
+            // tạo ra đối tượng object
+            Student student = new Student();
+
+            for (int j = i; j < i + COLUMN; j++) {
+
+                switch (j % COLUMN) {
+                    case 0:
+                        student.setStudentId(String.valueOf(arrString[j]));
+                        break;
+                    case 1:
+                        student.setClassId(String.valueOf(arrString[j]));
+                    case 2:
+                        student.setFullName(String.valueOf(arrString[j]));
                         break;
                     default:
                         break;

@@ -4,6 +4,7 @@
  */
 package Client;
 
+import Entity.Student;
 import Entity.Transcript;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
@@ -62,6 +63,8 @@ public final class frmTranscript extends javax.swing.JFrame {
     }
 
     public static List<Transcript> listTranscripts = new ArrayList<>();
+    
+    public static List<Student> listStudents = new ArrayList<>();
 
     public boolean isCellEditable(int row, int column) {
         //all cells false
@@ -92,12 +95,22 @@ public final class frmTranscript extends javax.swing.JFrame {
 
             // lấy chuỗi string từ chuỗi byte
             String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+            
+            String arrketquaString[] = ketquaString.split("\n\n");
 
-            if (!ketqua.isEmpty()) {
+            if (!arrketquaString[0].isEmpty()) {
                 DefaultTableModel model = (DefaultTableModel) tb_Subject.getModel();
-                StringHandling.StringHandling.getDefaultTableModel_Transcript(model, ketquaString);
+                StringHandling.StringHandling.getDefaultTableModel_Transcript(model, arrketquaString[0]);
 
-                StringHandling.StringHandling.getList_Transcript(listTranscripts, ketquaString);
+                StringHandling.StringHandling.getList_Transcript(listTranscripts, arrketquaString[0]);
+            }
+            
+            if (!arrketquaString[1].isEmpty()) {
+                DefaultTableModel model = (DefaultTableModel) tb_Student.getModel();
+                
+
+                StringHandling.StringHandling.getList_Student1(listStudents, arrketquaString[1]);
+                StringHandling.StringHandling.getDefaultTableModel_Student(model, listStudents);
             }
             socket.close();
         } catch (IOException e) {
