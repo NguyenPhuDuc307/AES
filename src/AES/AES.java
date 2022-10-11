@@ -99,8 +99,8 @@ public class AES {
                 + "}";
         AES aes = new AES();
         String enString = aes.encrypt(string);
-        String deString = aes.decrypt("dMIbvRe6rWhgWMexX8nbcQ==");
-        System.out.println(enString);
+        String deString = aes.decrypt("naReCSrk8l6aisdYvDh1jg==");
+        //System.out.println(enString);
         System.out.println(deString);
     }
 }

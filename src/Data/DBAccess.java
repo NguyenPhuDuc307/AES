@@ -127,6 +127,21 @@ public class DBAccess {
         }
         return list;
     }
+    
+    public static String getEmployeeNameById(String EmployId) {
+        String string = "";
+        String query = "EXEC SP_getEmployeeById ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, EmployId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                string = resultSet.getString(3);
+            }
+        } catch (SQLException e) {
+        }
+        return string;
+    }
 
     // Get Employee By EmloyeeId
     public static Employee getEmployeeById(String EmployId) {
@@ -246,6 +261,20 @@ public class DBAccess {
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 string += "\n" + resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+        }
+        return string.substring(1);
+    }
+
+    public static String getAllSubjectId() {
+        String string = "";
+        String query = "EXEC SP_GetSubjects";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                string += "\n" + (resultSet.getString(1) + " - " + resultSet.getString(2));
             }
         } catch (SQLException e) {
         }
@@ -416,13 +445,12 @@ public class DBAccess {
         }
     }
 
-    public static String deleteTranscripts(String StudentId, String SubjectId, String EmployeeId) {
-        String query = "EXEC SP_DeleteTranscript ?, ?, ?";
+    public static String deleteTranscripts(String StudentId, String SubjectId) {
+        String query = "EXEC SP_DeleteTranscript ?, ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, StudentId);
             preparedStatement.setString(2, SubjectId);
-            preparedStatement.setString(3, EmployeeId);
 
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
@@ -478,7 +506,7 @@ public class DBAccess {
         }
         return list;
     }
-    
+
     public static List<Student> getAllStudents1() {
         List<Student> list = new ArrayList<>();
         String query = "EXEC SP_GetStudents";
@@ -526,7 +554,7 @@ public class DBAccess {
             return er;
         }
     }
-    
+
     // Insert Class
     public static String insertTranscript(Transcript transcript) {
         String query = "EXEC SP_AddTranscript ?, ?, ?, ?";
@@ -536,7 +564,6 @@ public class DBAccess {
             preparedStatement.setString(2, transcript.getSubjectId());
             preparedStatement.setString(3, transcript.getEmployeeId());
             preparedStatement.setFloat(4, transcript.getTranscripts());
-            
 
             int result = preparedStatement.executeUpdate();
             if (result != 0) {
@@ -577,9 +604,9 @@ public class DBAccess {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
-    
+
     public static String updateTranscript(Transcript transcript) {
-        String query = "EXEC SP_UpDateStudent ?, ?, ?, ?, ?, ?, ?, ?";
+        String query = "EXEC SP_UpDateTrascript ?, ?, ?, ?";
         try {
             preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, transcript.getStudentId());
@@ -597,11 +624,24 @@ public class DBAccess {
             return e.toString().replaceAll("com.microsoft.sqlserver.jdbc.SQLServerException: ", "") + "!";
         }
     }
+    
+    public static String getTranscriptById(String StudentId, String SubjectId) {
+        String string = "";
+        String query = "EXEC SP_Showranscript ?, ?";
+        try {
+            preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, StudentId);
+            preparedStatement.setString(2, SubjectId);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                string = resultSet.getString(1);
+            }
+        } catch (SQLException e) {
+        }
+        return string;
+    }
 
     public static void main(String[] args) {
-        List<Employee> employees = getAllEmployees();
-        for (Employee employee : employees) {
-            System.out.println(employee);
-        }
+        System.out.println(getEmployeeNameById("1WpbaTUqgGknjK7/dx31fw=="));
     }
 }

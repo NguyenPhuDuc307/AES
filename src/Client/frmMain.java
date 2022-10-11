@@ -4,17 +4,75 @@
  */
 package Client;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+
 /**
  *
  * @author nguyenphuduc
  */
-public class frmMain extends javax.swing.JFrame {
+public final class frmMain extends javax.swing.JFrame {
 
-    /**
-     * Creates new form frmMain
-     */
     public frmMain() {
         initComponents();
+        setResizable(false);
+        crono();
+        switch (frmLogin.ROLES) {
+            case 1 -> {
+                MenuNV.setVisible(true);
+                MenuSV.setVisible(true);
+                MenuLop.setVisible(true);
+                MenuMH.setVisible(true);
+                MenuDiem.setVisible(true);
+                lbRole.setText("Bạn đang đăng nhập với quyền Quản trị viên");
+                lbName.setText("Xin chào " + frmLogin.FULLNAME + "!");
+            }
+            case 2 -> {
+                MenuNV.setVisible(false);
+                MenuSV.setVisible(true);
+                MenuLop.setVisible(true);
+                MenuMH.setVisible(true);
+                MenuDiem.setVisible(true);
+                lbRole.setText("Bạn đang đăng nhập với quyền Nhân viên");
+                lbName.setText("Xin chào " + frmLogin.FULLNAME + "!");
+            }
+            default -> {
+                MenuNV.setVisible(false);
+                MenuSV.setVisible(false);
+                MenuLop.setVisible(false);
+                MenuMH.setVisible(false);
+                MenuDiem.setVisible(false);
+                lbRole.setVisible(false);
+                lbName.setVisible(false);
+            }
+        }
+
+    }
+
+    public static String getCurrentTimeStamp() {
+        SimpleDateFormat sdfDate = new SimpleDateFormat("HH:mm:ss dd/MM/yyyy");
+        Date now = new Date();
+        String strDate = sdfDate.format(now);
+        return strDate;
+    }
+
+    public void crono() {
+        TimerTask tarea = new TimerTask() {
+
+            @Override
+            public void run() {
+
+                while (true) {
+                    lbTime.setText("Thời gian hiện tại: " + String.valueOf(getCurrentTimeStamp()));
+                }
+            }
+        };
+        Timer timer = new Timer();
+        timer.scheduleAtFixedRate(tarea, 0, 1000);
+
+//the first argument will be the task, the second the starting time, and the final one is //the period, in this case it will be one second
     }
 
     /**
@@ -25,35 +83,104 @@ public class frmMain extends javax.swing.JFrame {
     private void initComponents() {
 
         jDesktopPane1 = new javax.swing.JDesktopPane();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        lbTime = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lbName = new javax.swing.JLabel();
+        lbRole = new javax.swing.JLabel();
+        MenuBar = new javax.swing.JMenuBar();
+        MenuNV = new javax.swing.JMenu();
         btnAddEmployee = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu5 = new javax.swing.JMenu();
+        MenuLop = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        MenuSV = new javax.swing.JMenu();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        MenuMH = new javax.swing.JMenu();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenu4 = new javax.swing.JMenu();
+        MenuDiem = new javax.swing.JMenu();
         jMenuItem5 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Quản lý học tập");
 
+        jLabel1.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 204, 102));
+        jLabel1.setText("DaisyStudy");
+
+        jLabel2.setFont(new java.awt.Font("#9Slide03 SFU Futura_09", 2, 20)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Phần mềm quản lý học tập");
+
+        lbTime.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 2, 14)); // NOI18N
+        lbTime.setForeground(new java.awt.Color(255, 255, 255));
+        lbTime.setText("Thời gian hiện tại");
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo.png"))); // NOI18N
+
+        lbName.setFont(new java.awt.Font("#9Slide03 SFU Futura_07", 0, 24)); // NOI18N
+        lbName.setForeground(new java.awt.Color(204, 204, 255));
+        lbName.setText("Xin chào Nguyễn Phú Đức!");
+
+        lbRole.setFont(new java.awt.Font("#9Slide03 SFU Futura_09", 0, 18)); // NOI18N
+        lbRole.setForeground(new java.awt.Color(204, 204, 255));
+        lbRole.setText("Bạn đang đăng nhập với quyền Quản trị viên");
+
+        jDesktopPane1.setLayer(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(lbTime, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(lbName, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDesktopPane1.setLayer(lbRole, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 794, Short.MAX_VALUE)
+            .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addComponent(lbTime)
+                        .addGap(103, 694, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lbName)
+                            .addComponent(lbRole))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(99, 99, 99))))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 465, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane1Layout.createSequentialGroup()
+                .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 340, Short.MAX_VALUE))
+                    .addGroup(jDesktopPane1Layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(lbName)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lbRole)
+                        .addGap(42, 42, 42)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lbTime)
+                .addContainerGap())
         );
 
-        jMenu1.setText("Quản lý nhân viên");
-        jMenu1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        MenuBar.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        MenuNV.setText("Quản lý nhân viên   ");
+        MenuNV.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         btnAddEmployee.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         btnAddEmployee.setText("Thêm nhân viên");
@@ -62,7 +189,7 @@ public class frmMain extends javax.swing.JFrame {
                 btnAddEmployeeActionPerformed(evt);
             }
         });
-        jMenu1.add(btnAddEmployee);
+        MenuNV.add(btnAddEmployee);
 
         jMenuItem1.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jMenuItem1.setText("Quản lý nhân viên");
@@ -71,15 +198,15 @@ public class frmMain extends javax.swing.JFrame {
                 jMenuItem1ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem1);
+        MenuNV.add(jMenuItem1);
 
-        jMenuBar1.add(jMenu1);
+        MenuBar.add(MenuNV);
 
-        jMenu5.setText("Quản lý lớp học");
-        jMenu5.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
-        jMenu5.addMouseListener(new java.awt.event.MouseAdapter() {
+        MenuLop.setText("Quản lý lớp học   ");
+        MenuLop.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        MenuLop.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu5MouseClicked(evt);
+                MenuLopMouseClicked(evt);
             }
         });
 
@@ -90,12 +217,12 @@ public class frmMain extends javax.swing.JFrame {
                 jMenuItem4ActionPerformed(evt);
             }
         });
-        jMenu5.add(jMenuItem4);
+        MenuLop.add(jMenuItem4);
 
-        jMenuBar1.add(jMenu5);
+        MenuBar.add(MenuLop);
 
-        jMenu2.setText("Quản lý sinh viên");
-        jMenu2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        MenuSV.setText("Quản lý sinh viên   ");
+        MenuSV.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jMenuItem2.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jMenuItem2.setText("Quản lý sinh viên");
@@ -104,12 +231,12 @@ public class frmMain extends javax.swing.JFrame {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem2);
+        MenuSV.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu2);
+        MenuBar.add(MenuSV);
 
-        jMenu3.setText("Quản lý môn học");
-        jMenu3.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        MenuMH.setText("Quản lý môn học   ");
+        MenuMH.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jMenuItem3.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jMenuItem3.setText("Quản lý môn học");
@@ -118,12 +245,12 @@ public class frmMain extends javax.swing.JFrame {
                 jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu3.add(jMenuItem3);
+        MenuMH.add(jMenuItem3);
 
-        jMenuBar1.add(jMenu3);
+        MenuBar.add(MenuMH);
 
-        jMenu4.setText("Quản lý điểm");
-        jMenu4.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
+        MenuDiem.setText("Quản lý điểm   ");
+        MenuDiem.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
 
         jMenuItem5.setFont(new java.awt.Font("#9Slide03 SFU Futura_03", 0, 14)); // NOI18N
         jMenuItem5.setText("Quản lý điểm");
@@ -132,11 +259,11 @@ public class frmMain extends javax.swing.JFrame {
                 jMenuItem5ActionPerformed(evt);
             }
         });
-        jMenu4.add(jMenuItem5);
+        MenuDiem.add(jMenuItem5);
 
-        jMenuBar1.add(jMenu4);
+        MenuBar.add(MenuDiem);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(MenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -165,10 +292,10 @@ public class frmMain extends javax.swing.JFrame {
         frm.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
-    private void jMenu5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu5MouseClicked
+    private void MenuLopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MenuLopMouseClicked
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jMenu5MouseClicked
+
+    }//GEN-LAST:event_MenuLopMouseClicked
 
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         // TODO add your handling code here:
@@ -222,26 +349,30 @@ public class frmMain extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmMain().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frmMain().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JMenu MenuDiem;
+    private javax.swing.JMenu MenuLop;
+    private javax.swing.JMenu MenuMH;
+    private javax.swing.JMenu MenuNV;
+    private javax.swing.JMenu MenuSV;
     private javax.swing.JMenuItem btnAddEmployee;
     private javax.swing.JDesktopPane jDesktopPane1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenu jMenu5;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JLabel lbName;
+    private javax.swing.JLabel lbRole;
+    private javax.swing.JLabel lbTime;
     // End of variables declaration//GEN-END:variables
 }

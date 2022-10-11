@@ -4,6 +4,7 @@
  */
 package Client;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.nio.charset.StandardCharsets;
@@ -22,6 +23,7 @@ public class frmLogin extends javax.swing.JFrame {
     private Scanner in = null;
 
     public static String USERNAME;
+    public static String FULLNAME;
     public static int ROLES;
 
     public frmLogin() {
@@ -139,9 +141,9 @@ public class frmLogin extends javax.swing.JFrame {
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
+                .addGap(43, 43, 43)
                 .addComponent(jLabel1)
-                .addGap(56, 56, 56)
+                .addGap(43, 43, 43)
                 .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2))
@@ -214,29 +216,39 @@ public class frmLogin extends javax.swing.JFrame {
 
                 // lấy ra kết quả
                 ketqua = String.valueOf(in.nextLine());
+                
+                String ketquaString = new String(Base64.getDecoder().decode(ketqua), StandardCharsets.UTF_8);
+                
+                String arrString[] = ketquaString.split("\n");
+
+                
+                if (!arrString[1].isEmpty()) {
+                    FULLNAME = arrString[1];
+                }
+                
+                // nếu đăng nhập thành công
+                if (arrString[0].equals("1") || arrString[0].equals("2") || arrString[0].equals("3")) {
+                    ROLES = Integer.parseInt(arrString[0]);
+                    JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
+                    frmMain frm = new frmMain();
+                    frm.setVisible(true);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, arrString[0]);
+                }
+                
+                
 
                 socket.close();
-            } catch (Exception e) {
+            } catch (IOException e) {
                 try {
                     if (socket != null) {
                         socket.close();
                     }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
+                } catch (IOException ex) {
                 }
-                e.printStackTrace();
             }
 
-            // nếu đăng nhập thành công
-            if (ketqua.equals("1") || ketqua.equals("2") || ketqua.equals("3")) {
-                ROLES = Integer.parseInt(ketqua);
-                JOptionPane.showMessageDialog(null, "Đăng nhập thành công!");
-                frmMain frm = new frmMain();
-                frm.setVisible(true);
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(null, ketqua);
-            }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
@@ -274,10 +286,8 @@ public class frmLogin extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmLogin().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new frmLogin().setVisible(true);
         });
     }
 

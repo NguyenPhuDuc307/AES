@@ -96,17 +96,26 @@ public class StringHandling {
                 String st_val = removeAccent(String.valueOf(table.getValueAt(row, column_index).toString()));
                 if (text.isEmpty()) {
 
-                    c.setBackground(Color.getHSBColor(255, 204, 102));
+                    c.setBackground(Color.getHSBColor(150, 204, 30));
                 } else {
                     if (st_val.toLowerCase().contains(text.toLowerCase())) {
                         c.setBackground(Color.getHSBColor(255, 204, 200));
                     } else {
-                        c.setBackground(Color.getHSBColor(255, 204, 102));
+                        c.setBackground(Color.getHSBColor(255, 204, 30));
                     }
                 }
                 return c;
             }
         });
+    }
+
+    public static Transcript getTranscript(List<Transcript> listTranscripts, String StudentId, String SubjectId) {
+        for (Transcript transcript : listTranscripts) {
+            if (transcript.getStudentId().equals(StudentId) && transcript.getSubjectId().equals(SubjectId )) {
+                return transcript;
+            }
+        }
+        return null;
     }
 
     public void changeTabledefault(JTable table, int column_index, String text) {
@@ -152,7 +161,7 @@ public class StringHandling {
         }
         return string;
     }
-    
+
     public static String getStringStudent1() {
         String string = "";
         List<Student> listStudents = DBAccess.getAllStudents1();
@@ -178,6 +187,18 @@ public class StringHandling {
         return string;
     }
 
+    public static String getStringClassId() {
+        String string = "";
+        List<Class> listClasses = DBAccess.getAllCLasses();
+        if (!listClasses.isEmpty()) {
+            for (Class cl : listClasses) {
+                string += cl.getClassIdString() + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
+    }
+
     //chuyển list Subject thành chuỗi
     public static String getStringSubject() {
         String string = "";
@@ -185,6 +206,18 @@ public class StringHandling {
         if (!listSubjects.isEmpty()) {
             for (Subject subject : listSubjects) {
                 string += subject + "\n";
+            }
+            return string.substring(0, string.length() - 1);
+        }
+        return string;
+    }
+    
+    public static String getStringSubjectId() {
+        String string = "";
+        List<Subject> listSubjects = DBAccess.getAllSubjects();
+        if (!listSubjects.isEmpty()) {
+            for (Subject subject : listSubjects) {
+                string += subject.getSubjectId() + " - " + subject.getSubjectName() + "\n";
             }
             return string.substring(0, string.length() - 1);
         }
@@ -289,7 +322,7 @@ public class StringHandling {
             model.addRow(row);
         }
     }
-    
+
     // chuyển chuỗi thành model
     public static void getList_Employee(List<Employee> list, String string) {
 
@@ -475,7 +508,7 @@ public class StringHandling {
         }
 
         int COLUMN = 4;
-        
+
         for (Subject subject : listSubjects) {
             Object[] row = new Object[COLUMN];
             row[0] = String.valueOf(subject.getSubjectId());
@@ -490,11 +523,10 @@ public class StringHandling {
             model.addRow(row);
         }
 
-        
     }
 
     // chuyển chuỗi thành model
-    public static void getDefaultTableModel_Transcript(DefaultTableModel model, String string) {
+    public static void getDefaultTableModel_Transcript(DefaultTableModel model, List<Transcript> listTranscripts) {
 
         while (model.getRowCount() > 0) {
             model.removeRow(0);
@@ -502,44 +534,87 @@ public class StringHandling {
 
         int COLUMN = 7;
 
-        // ngắt chuỗi thành array
-        String arrString[] = string.split("\n");
-
-        for (int i = 0; i < arrString.length; i += COLUMN) {
-
-            // tạo ra đối tượng object
+        for (Transcript transcript : listTranscripts) {
             Object[] row = new Object[COLUMN];
-            for (int j = i; j < i + COLUMN; j++) {
+            row[0] = transcript.getStudentId();
+            row[1] = transcript.getClassIdString();
+            row[2] = transcript.getStudentName();
+            row[3] = transcript.getSubjectId();
+            row[4] = transcript.getSubjectName();
+            row[5] = transcript.getEmployeeName();
+            row[6] = transcript.getTranscripts();
 
-                switch (j % COLUMN) {
-                    case 0:
-                        row[0] = String.valueOf(arrString[j]);
-                        break;
-                    case 1:
-                        row[1] = String.valueOf(arrString[j]);
-                        break;
-                    case 2:
-                        row[2] = String.valueOf(arrString[j]);
-                        break;
-                    case 3:
-                        row[3] = String.valueOf(arrString[j]);
-                        break;
-                    case 4:
-                        row[4] = String.valueOf(arrString[j]);
-                        break;
-                    case 5:
-                        row[5] = String.valueOf(arrString[j]);
-                        break;
-                    case 6:
-                        row[6] = String.valueOf(arrString[j]);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
-            // lưu vào danh sách
             model.addRow(row);
+        }
+    }
+
+    public static void getDefaultTableModel_Transcript_C(DefaultTableModel model, List<Transcript> listTranscripts, String ClassId) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 7;
+
+        for (Transcript transcript : listTranscripts) {
+            if (transcript.getClassIdString().equals(ClassId)) {
+                Object[] row = new Object[COLUMN];
+                row[0] = transcript.getStudentId();
+                row[1] = transcript.getClassIdString();
+                row[2] = transcript.getStudentName();
+                row[3] = transcript.getSubjectId();
+                row[4] = transcript.getSubjectName();
+                row[5] = transcript.getEmployeeName();
+                row[6] = transcript.getTranscripts();
+
+                model.addRow(row);
+            }
+        }
+    }
+
+    public static void getDefaultTableModel_Transcript_S(DefaultTableModel model, List<Transcript> listTranscripts, String SubjectId) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 7;
+
+        for (Transcript transcript : listTranscripts) {
+            if (transcript.getSubjectId().equals(SubjectId)) {
+                Object[] row = new Object[COLUMN];
+                row[0] = transcript.getStudentId();
+                row[1] = transcript.getClassIdString();
+                row[2] = transcript.getStudentName();
+                row[3] = transcript.getSubjectId();
+                row[4] = transcript.getSubjectName();
+                row[5] = transcript.getEmployeeName();
+                row[6] = transcript.getTranscripts();
+                model.addRow(row);
+            }
+        }
+    }
+
+    public static void getDefaultTableModel_Transcript_CS(DefaultTableModel model, List<Transcript> listTranscripts, String ClassId, String SubjectIdString) {
+
+        while (model.getRowCount() > 0) {
+            model.removeRow(0);
+        }
+
+        int COLUMN = 7;
+
+        for (Transcript transcript : listTranscripts) {
+            if (transcript.getClassIdString().equals(ClassId) && transcript.getSubjectId().equals(SubjectIdString)) {
+                Object[] row = new Object[COLUMN];
+                row[0] = transcript.getStudentId();
+                row[1] = transcript.getClassIdString();
+                row[2] = transcript.getStudentName();
+                row[3] = transcript.getSubjectId();
+                row[4] = transcript.getSubjectName();
+                row[5] = transcript.getEmployeeName();
+                row[6] = transcript.getTranscripts();
+                model.addRow(row);
+            }
         }
     }
 
@@ -593,7 +668,7 @@ public class StringHandling {
             list.add(student);
         }
     }
-    
+
     public static void getList_Student1(List<Student> list, String string) {
 
         list.removeAll(list);
@@ -677,13 +752,20 @@ public class StringHandling {
         return null;
     }
 
-    public static Transcript getTranscript(List<Transcript> listTranscript, String StudentIdString, String SubjectId, String EmployeeId) {
+    public static String getListSubjectFromListTranscript(List<Transcript> listTranscript) {
+        String result = "";
         for (Transcript transcript : listTranscript) {
-            if (transcript.getEmployeeId().equals(EmployeeId) || transcript.getStudentId().equals(StudentIdString) || transcript.getSubjectId().equals(SubjectId)) {
-                return transcript;
-            }
+            result += transcript.getSubjectId() + " - " + transcript.getSubjectName() + "\n";
         }
-        return null;
+        return result.substring(0, result.length() - 1);
+    }
+
+    public static String getListClassFromListTranscript(List<Transcript> listTranscript) {
+        String result = "";
+        for (Transcript transcript : listTranscript) {
+            result += transcript.getClassIdString() + "\n";
+        }
+        return result.substring(0, result.length() - 1);
     }
 
     public static Student getStudent(List<Student> listStudent, String StudentId) {
