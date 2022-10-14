@@ -20,7 +20,7 @@ public class SQLServerConnection {
 
     public static void main(String[] args) {
         try {
-            System.out.println(new SQLServerConnection().getConnection());
+            System.out.println(SQLServerConnection.getConnection());
         } catch (Exception e) {
         }
     }

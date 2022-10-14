@@ -138,7 +138,7 @@ public final class frmTranscript extends javax.swing.JFrame {
                         Collections.sort(listTranscripts, (Transcript a, Transcript b) -> a.getEmployeeName().compareTo(b.getEmployeeName()));
                     }
                     case 6 -> {
-                        Collections.sort(listTranscripts, (Transcript a, Transcript b) -> String.valueOf(a.getTranscripts()).compareTo(String.valueOf(b.getTranscripts())));
+                        Collections.sort(listTranscripts, (Transcript a, Transcript b) -> Float.compare(b.getTranscripts(), a.getTranscripts()));
                     }
                 }
 
@@ -995,8 +995,9 @@ public final class frmTranscript extends javax.swing.JFrame {
         txtLop.setText(transcript.getClassIdString());
         if (!txtDiem.getText().isEmpty()) {
             btnXoa.setVisible(true);
-        } else
+        } else {
             btnXoa.setVisible(false);
+        }
 
     }//GEN-LAST:event_tb_TranscriptMouseClicked
 

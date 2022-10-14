@@ -103,7 +103,6 @@ public class ServerThread implements Runnable {
                     // gửi đi
                     out.println(inputBase64);
                 }
-
                 case "getAllTranscripts" -> {
                     String resultString1 = StringHandling.StringHandling.getStringTranscript();
                     String resultString2 = StringHandling.StringHandling.getStringStudent1();
@@ -271,7 +270,7 @@ public class ServerThread implements Runnable {
                 }
                 case "addTranscript" -> {
                     String arr[] = string.split("\n");
-                    Transcript transcript = new Transcript(arr[0], arr[1], arr[2], Float.parseFloat(arr[3]));
+                    Transcript transcript = new Transcript(arr[0], arr[1], AES.AES.encrypt(arr[2]), Float.parseFloat(arr[3]));
                     String resultString = DBAccess.insertTranscript(transcript);
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
@@ -291,7 +290,7 @@ public class ServerThread implements Runnable {
                 }
                 case "updateTranscript" -> {
                     String arr[] = string.split("\n");
-                    Transcript transcript = new Transcript(arr[0], arr[1], arr[2], Float.parseFloat(arr[3]));
+                    Transcript transcript = new Transcript(arr[0], arr[1], AES.AES.encrypt(arr[2]), Float.parseFloat(arr[3]));
                     String resultString = DBAccess.updateTranscript(transcript);
                     // chuyển thông tin về dạng byte
                     byte[] inputByte = resultString.getBytes(StandardCharsets.UTF_8);
